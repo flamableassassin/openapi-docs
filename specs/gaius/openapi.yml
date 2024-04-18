@@ -654,7 +654,9 @@ paths:
             - type: "null"
         in: header
     get:
-      summary: Get information
+      tags:
+        - other
+      summary: Get user information
       security:
         - apiKey:
             - info
