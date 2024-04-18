@@ -1,0 +1,6 @@
+refnum:
+  in: query
+  required: true
+  schema:
+    type: integer
+    format: item id

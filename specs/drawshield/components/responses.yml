@@ -1,0 +1,91 @@
+#? contains the responses that are regularly used for some of the endpoints
+
+image:
+  description: The output image. The content type depends on `outputformat` and `saveformat` parameters
+  content:
+    image/jpg:
+      schema:
+        $ref: "./schemas.yml#/images"
+    image/png:
+      schema:
+        $ref: "./schemas.yml#/images"
+    text/xml:
+      schema:
+        type: string
+        format: xml
+    application/json:
+      schema:
+        type: object
+        properties:
+          image:
+            type: string
+            format: Base64 PNG
+            description: The Base64 encoded image
+          options:
+            type: object
+            description: The endpoint reflecting the options of the request or options its applied itself
+            properties:
+              blazon:
+                type: string
+              palette:
+                type: string
+              printable:
+                type: boolean
+              filename:
+                type: string
+              size:
+                type: integer
+              saveFormat:
+                type: string
+              outputFormat:
+                type: string
+              asFile:
+                type: boolean
+              effect:
+                type: string
+              stage:
+                type: string
+              shapeSet:
+                type: boolean
+              shape:
+                type: string
+              printSize:
+                type: integer
+              units:
+                type: string
+              aspectRatio:
+                type: number
+              logBlazon:
+                type: boolean
+              notify:
+                type: boolean
+              useWebColours:
+                type: boolean
+              useWarhammerColours:
+                type: boolean
+              useTartanColours:
+                type: boolean
+          messages:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                  nullable: true
+                  description: If the message can be related to a specific part of the phrase tree this property gives value of the ID attribute of the relevant node
+                context:
+                  type: string
+                  nullable: true
+                  description: If this is an error message related to the blazon this is that part of the input blazon text in which the error occurred
+                category:
+                  type: string
+                  description: Hopefully self-explanatory
+                  enum:
+                    - blazon
+                    - warning
+                    - internal
+                    - licence
+                content:
+                  description: The message text
+                  type: string

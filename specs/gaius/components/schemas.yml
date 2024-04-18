@@ -1,0 +1,119 @@
+#? contains the schemas that are regularly used for some of the endpoints
+wordlist:
+  type: array
+  items:
+    type: object
+    properties:
+      word:
+        type: string
+      flags:
+        type: array
+        items:
+          type: string
+userCaselog:
+  type: object
+  additionalProperties:
+    description: "The case ID as the index"
+    type: object
+    properties:
+      bans:
+        type: integer
+      kicks:
+        type: integer
+      softbans:
+        type: integer
+      mutes:
+        type: integer
+      warns:
+        type: integer
+      vcmutes:
+        type: integer
+      vcbans:
+        type: integer
+      unmutes:
+        type: integer
+      purgewarns:
+        type: integer
+      pardons:
+        type: integer
+      unbans:
+        type: integer
+caseLog:
+  type: object
+  additionalProperties:
+    description: "The case ID as the index"
+    type: object
+    properties:
+      casenum:
+        type: integer
+      type:
+        type: string
+        enum:
+          - ban
+          - kick
+          - mute
+          - vcmute
+          - softban
+          - vcban
+          - timeout
+      time:
+        type: number
+      userid:
+        type: string
+        format: "Discord Snowflake"
+      modid:
+        type: string
+        format: "Discord Snowflake"
+      reason:
+        type: string
+      date:
+        type: number
+        format: Timestamp
+warnings:
+  type: array
+  items:
+    type: object
+    properties:
+      guildid:
+        type: string
+        format: "Snowflake"
+      warnid:
+        type: number
+      userid:
+        type: string
+        format: "Snowflake"
+      reason:
+        type: string
+      warndate:
+        type: number
+        format: Timestamp
+      pardonerid:
+        type:
+          - string
+          - "null"
+        format: "Snowflake"
+      pardondate:
+        type:
+          - integer
+          - "null"
+        format: Timestamp
+      modid:
+        type: string
+        format: "Snowflake"
+notes:
+  type: array
+  items:
+    type: object
+    properties:
+      guildid:
+        type: string
+      id:
+        type: integer
+      userid:
+        type: string
+      msg:
+        type: string
+      modid:
+        type: string
+      time:
+        type: integer

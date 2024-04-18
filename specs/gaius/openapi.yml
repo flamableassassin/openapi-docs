@@ -1,0 +1,692 @@
+openapi: 3.1.0
+servers:
+  - url: https://api.gaiusbot.me
+info:
+  title: Unofficial API Docs for Gaius Discord Bots
+  version: "1.0"
+  license:
+    name: MIT
+    url: https://mit-license.org/
+  description: |
+    # About
+    **Unofficial [Gaius](https://gaiusbot.me) API docs**
+    Built by [Flammableassassin](https://github.com/flamableassassin)
+
+    If you wish to contribute feel free to here https://github.com/flamableassassin/openapi-docs
+
+    Each group has a link to the discord messages from the original API docs. Join the discord server with this invite: https://discord.gg/C7SxkVh
+
+
+    <SecurityDefinitions />
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: api-key
+      description: |
+        Use the `createapikey scope scope` command in your server to get the api key for your server.
+
+        Available scopes:
+          - `warnings`
+          - `caselogs`
+          - `wordlists`
+          - `notes`
+          - `info`
+
+  responses:
+    unauthorised:
+      description: The response for a 401. Either no api key was sent or the api key doesn't have the scope for the endpoint
+      content:
+        text/plain:
+          schema:
+            enum:
+              - Not Permitted
+            type: string
+tags:
+  - name: wordlist
+    description: Endpoints for wordlists
+    x-displayName: Wordlist Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/914296431156805633
+  - name: images
+    description: Get a random picture
+    x-displayName: Image Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/914297735321120839
+  - name: caselogs
+    description: Endpoint for case logs
+    x-displayName: Cage logs Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/914299007977795584
+  - name: warnings
+    description: Endpoints for fetching warnings
+    x-displayName: Warnings Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/951126712152903771
+  - name: notes
+    description: Endpoints for fetching user notes
+    x-displayName: Note Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/994386530179239937
+  - name: other
+    description: Other endpoints
+    x-displayName: Other Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/994393407755653210
+
+paths:
+  /wordlist:
+    get:
+      tags:
+        - wordlist
+      summary: Get a list of all wordlists
+      security:
+        - apiKey:
+            - wordlists
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    listname:
+                      type: string
+                    private:
+                      type: boolean
+                    locked:
+                      type: boolean
+  /wordlist/{ListName}:
+    description: Deletes the given list if no array of words provided.
+    parameters:
+      - name: ListName
+        in: path
+        schema:
+          type: string
+    get:
+      tags:
+        - wordlist
+      summary: Get all words in a list
+      security:
+        - apiKey:
+            - wordlists
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/wordlist"
+    put:
+      tags:
+        - wordlist
+      summary: Creates new list with given name optional array of words can be put in the body.
+      security:
+        - apiKey:
+            - wordlists
+      requestBody:
+        required: false
+        description: List of words to add to the list.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                words:
+                  $ref: "./components/schemas.yml#/wordlist"
+
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successfully creating a new wordlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  added:
+                    $ref: "./components/schemas.yml#/wordlist"
+                  invalid:
+                    type: array
+                    items:
+                      $schema: Any
+                      description: Raw Value that was invalid
+                      example: you pass 'invalid word' instead of {word, flags} and you get 'invalid word'
+    patch:
+      tags:
+        - wordlist
+      summary: Update a created list with the words
+      security:
+        - apiKey:
+            - wordlists
+      requestBody:
+        required: true
+        description: List of words to add to the list.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                words:
+                  $ref: "./components/schemas.yml#/wordlist"
+
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successfully creating a new wordlist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  added:
+                    $ref: "./components/schemas.yml#/wordlist"
+                  invalid:
+                    type: array
+                    items:
+                      $schema: Any
+                      description: Raw Value that was invalid
+                      example: you pass 'invalid word' instead of {word, flags} and you get 'invalid word'
+    delete:
+      tags:
+        - wordlist
+      summary: Delete words from a list
+      security:
+        - apiKey:
+            - wordlists
+      requestBody:
+        required: false
+        description: List of words to delete from the list
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                words:
+                  type: array
+                  items:
+                    type: string
+                    summary: The word or its ID
+
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response for deleting the wordlist or words from the list
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "./components/schemas.yml#/wordlist"
+                    description: The response if a list of words was supplied in the body
+                  - type: object
+                    properties:
+                      list:
+                        type: object
+                        properties:
+                          listname:
+                            type: string
+                            description: The list name
+                          private:
+                            type: boolean
+                          locked:
+                            type: boolean
+                          words:
+                            $ref: "./components/schemas.yml#/wordlist"
+
+  /images/snek:
+    get:
+      tags:
+        - images
+      security:
+        - apiKey: []
+        - {}
+      summary: Get a random picture of a snake
+      responses:
+        200:
+          description: The Image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+  /images/bunny:
+    get:
+      tags:
+        - images
+      security:
+        - apiKey: []
+        - {}
+      summary: Get a random picture of a bunny
+      responses:
+        200:
+          description: The Image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+  /images/guts:
+    get:
+      tags:
+        - images
+      security:
+        - apiKey: []
+        - {}
+      summary: Get a random picture of Guts from 'Berserk'
+      responses:
+        200:
+          description: The Image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+  /images/holo:
+    get:
+      tags:
+        - images
+      security:
+        - apiKey: []
+        - {}
+      summary: Get a random picture of Holo from 'Spice and Wolf'
+      responses:
+        200:
+          description: The Image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+  /images/frieza:
+    get:
+      tags:
+        - images
+      security:
+        - apiKey: []
+        - {}
+      summary: Get a random picture of Frieza from 'Dragon Ball'
+      responses:
+        200:
+          description: The Image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+  /images/seaslug:
+    get:
+      tags:
+        - images
+      security:
+        - apiKey: []
+        - {}
+      summary: Get a random picture of a Sea slug
+      responses:
+        200:
+          description: The Image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+
+  /caselogs/all:
+    get:
+      tags:
+        - caselogs
+      summary: Get all caselogs
+      security:
+        - apiKey:
+            - caselogs
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/userCaselog"
+  /caselogs/{query}:
+    parameters:
+      - name: query
+        in: path
+        description: Either a User ID or warning ID
+        schema:
+          oneOf:
+            - type: string
+              format: "Snowflake"
+              description: User ID
+            - type: integer
+              description: Warn ID
+    get:
+      tags:
+        - caselogs
+      summary: Fetch caselog with ID
+      description: Fetch all caselogs for a user ID or the caselog with the corresponding ID
+      security:
+        - apiKey:
+            - caselogs
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/userCaselog"
+  /caselogs/after/{Time}:
+    parameters:
+      - name: Time
+        in: path
+        schema:
+          type: string
+          examples:
+            - "2022-09-27 18:00:00.000"
+          oneOf:
+            - format: ISO Date
+            - format: Timestamp
+    get:
+      tags:
+        - caselogs
+      summary: Get all caselogs that occurred after the given date.
+      description: "Get all caselogs that occurred after the given timestamp or ISO date. Invalid dates are: before 2016, and 1 minute after the current time"
+      security:
+        - apiKey:
+            - caselogs
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        400:
+          description: Response for invalid date
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                  - Invalid date
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./components/schemas.yml#/caseLog"
+  /caselogs/before/{Time}:
+    parameters:
+      - name: Time
+        in: path
+        schema:
+          type: string
+          examples:
+            - "2022-09-27 18:00:00.000"
+          oneOf:
+            - format: ISO Date
+            - format: Timestamp
+    get:
+      tags:
+        - caselogs
+      summary: Get all caselogs that occurred before the given date.
+      description: "Get all caselogs that occurred before the given timestamp or ISO date. Invalid dates are: before 2016, and 1 minute after the current time"
+      security:
+        - apiKey:
+            - caselogs
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        400:
+          description: Response for invalid date
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                  - Invalid date
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./components/schemas.yml#/caseLog"
+
+  /warnings/all:
+    get:
+      summary: Get all warnings for the given server.
+      tags:
+        - warnings
+      security:
+        - apiKey:
+            - warnings
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response for getting all warnings
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/warnings"
+  /warnings/{query}:
+    parameters:
+      - name: query
+        in: path
+        description: Either a User ID or warning ID
+        schema:
+          oneOf:
+            - type: string
+              format: "Snowflake"
+              description: User ID
+            - type: integer
+              description: Warn ID
+    get:
+      summary: Fetch warning with ID
+      description: Fetch all warnings for a user ID or the warning with the corresponding ID
+      tags:
+        - warnings
+      security:
+        - apiKey:
+            - warnings
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response for getting all warnings
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/warnings"
+  /warnings/after/{Time}:
+    parameters:
+      - name: Time
+        in: path
+        schema:
+          type: string
+          examples:
+            - "2022-09-27 18:00:00.000"
+          oneOf:
+            - format: ISO Date
+            - format: Timestamp
+    get:
+      tags:
+        - warnings
+      summary: Get all warnings that occurred after date.
+      description: "Get all warnings that occurred after the given timestamp or ISO date. Invalid dates are: before 2016, and 1 minute after the current time"
+      security:
+        - apiKey:
+            - warnings
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        400:
+          description: Response for invalid date
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                  - Invalid date
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./components/schemas.yml#/warnings"
+  /warnings/before/{Time}:
+    parameters:
+      - name: Time
+        in: path
+        schema:
+          type: string
+          examples:
+            - "2022-09-27 18:00:00.000"
+          oneOf:
+            - format: ISO Date
+            - format: Timestamp
+    get:
+      tags:
+        - warnings
+      summary: Get all warnings that occurred before date.
+      description: "Get all warnings that occurred before the given timestamp or ISO date. Invalid dates are: before 2016, and 1 minute after the current time"
+      security:
+        - apiKey:
+            - warnings
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        400:
+          description: Response for invalid date
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                  - Invalid date
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "./components/schemas.yml#/warnings"
+
+  /notes/all:
+    get:
+      tags:
+        - notes
+      security:
+        - apiKey:
+            - notes
+      summary: Get all notes for a given server.
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: All notes for the given server.
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/notes"
+  /notes/{query}:
+    parameters:
+      - name: query
+        in: path
+        description: Either a User ID or warning ID
+        schema:
+          oneOf:
+            - type: string
+              format: "Snowflake"
+              description: User ID
+            - type: integer
+              description: Warn ID
+    get:
+      tags:
+        - notes
+      security:
+        - apiKey:
+            - notes
+      summary: Fetch note with ID
+      description: Fetch all notes for a user ID or the note with the corresponding ID
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: All notes for the given server.
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/notes"
+
+  /user/{User}:
+    parameters:
+      - name: User
+        schema:
+          type: string
+          format: "Snowflake"
+        in: path
+      - name: bot
+        description: Which bot to use if not supplied the server will try to guess.
+        schema:
+          oneOf:
+            - type: string
+              enum:
+                - blue
+                - plus
+                - pink
+            - type: "null"
+        in: header
+    get:
+      summary: Get information
+      security:
+        - apiKey:
+            - info
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        418:
+          description: The response for an invalid user ID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - "and so are you."
+        200:
+          description: The users response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  member:
+                    $ref: "https://raw.githubusercontent.com/discord/discord-api-spec/cf529032c3c00e24e07426633b8aa8bdf94cb631/specs/openapi.json#/components/schemas/GuildMemberResponse"
+                  infractions:
+                    type: object
+                    properties:
+                      noteCount:
+                        type: integer
+                      warnCount:
+                        type: integer
+                      caseCount:
+                        type: integer

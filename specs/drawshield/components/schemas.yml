@@ -1,0 +1,100 @@
+#? contains the schemas that are regularly used for some of the endpoints
+images:
+  type: string
+  format: binary
+blazon:
+  type: string
+  example: Crusilly orange and gules three chevronels interlaced purpure three
+    lions courant in bend sinister or.
+shape:
+  default: heater
+  type: string
+  enum:
+    - heater
+    - heater
+    - french
+    - oval
+    - lozenge
+    - square
+    - italian
+    - swiss
+    - english
+    - german
+    - horsehead
+    - polish
+    - spanish
+    - circle
+    - sca
+    - hungarian
+    - scutum
+    - african
+    - persian
+    - swatch
+    - pauldron
+    - stamp
+    - flag
+palette:
+  type: string
+  default: drawshield
+  enum:
+    - wikipedia
+    - drawshield
+    - wappenwiki
+    - cc3
+    - flat
+    - english
+    - emoji
+    - bajuvarian
+    - hatching
+    - outline
+effect:
+  type: string
+  default: none
+  enum:
+    - none
+    - shiny
+    - plain
+    - stonework
+    - plaster
+    - vellum
+    - ripples
+    - fabric
+    - inked
+size:
+  default: 500
+  type: integer
+outputformat:
+  default: svg
+  type: string
+  enum:
+    - svg
+    - jpg
+    - png
+    - json
+aspectratio:
+  type: number
+  default: 0.5
+printable:
+  default: false
+  type: boolean
+stage:
+  default: render
+  type: string
+  enum:
+    - parser
+    - references
+    - links
+    - render
+yesParam:
+  type: string
+  enum:
+    - yes
+onOffParam:
+  type: string
+  enum:
+    - on
+    - off
+0To100:
+  type: integer
+  minimum: 0
+  maximum: 100
