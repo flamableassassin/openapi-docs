@@ -1,0 +1,645 @@
+openapi: 3.1.0
+info:
+  version: 1.0.1
+  title: Chewey Bot Api
+  description: >-
+    Api docs for the [Chewey Bot API](https://chewey-bot.top)
+
+
+    There are a few of packages available for interacting with the api
+    (Node.js):
+
+
+    * [Discord-bot-analytics](http://npmjs.com/discord-bot-analytics)
+
+
+    * [Cheweybot-api](https://www.npmjs.com/cheweybot-api)
+
+
+
+    If you like this project and want to help us you can do it with
+    [Patreon](https://www.patreon.com/CheweyZ) or
+    [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=PC23X9RB62NGU)
+
+  contact:
+    name: Chewey Bot
+    url: https://chewey-bot.top
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+security:
+  - testApi: []
+servers:
+  - url: https://api.chewey-bot.top
+tags:
+  - name: Images
+    description: Get random Images
+  - name: Analytics
+    description: The analytics api
+  - name: Shields
+    description: Shields for the analytics api
+  - name: Other
+    description: Other parts of the api
+components:
+  schemas:
+    ResponseData:
+      type: object
+      properties:
+        data:
+          type: string
+          format: uri
+          description: The url for the image
+    AnalyticsData:
+      type: object
+      properties:
+        servers:
+          type: integer
+          format: int32
+          description: The number of servers the bot is in
+        users:
+          type: integer
+          format: int32
+          description: The number of users the bot can see
+        channels:
+          type: integer
+          format: int32
+          description: The number of channels the bot can see
+        sent_messages:
+          type: integer
+          format: int32
+          description: The number of messages the bot has sent
+        received_messages:
+          type: integer
+          format: int32
+          description: The number of messages the bot has received
+        ram_used:
+          type: integer
+          format: int32
+          description: The amount of ram the bot is using
+        created:
+          type: string
+          format: data-time
+          description: The time and date the data was created at
+  responses:
+    GeneralResponse:
+      description: The image url in the data field
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/ResponseData"
+    ImageResponse:
+      description: The image url in the data field
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/ResponseData"
+      headers:
+        x-rate-limit-limit:
+          $ref: "#/components/headers/xratelimitlimit"
+        x-rate-limit-remaining:
+          $ref: "#/components/headers/xratelimitremaining"
+    InvaildToken:
+      description: Invaild or no api key used
+    AnalyticsResponse:
+      description: The analytics from the server
+      content:
+        application/json:
+          schema:
+            type: object
+            $ref: "#/components/schemas/AnalyticsData"
+      headers:
+        x-rate-limit-limit:
+          $ref: "#/components/headers/xratelimitlimit"
+        x-rate-limit-remaining:
+          $ref: "#/components/headers/xratelimitremaining"
+    AnalyticsResponseArray:
+      description: The analytics from the server
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: array
+              items:
+                $ref: "#/components/schemas/AnalyticsData"
+      headers:
+        x-rate-limit-limit:
+          $ref: "#/components/headers/xratelimitlimit"
+        x-rate-limit-remaining:
+          $ref: "#/components/headers/xratelimitremaining"
+    AnalyticsRateLimit:
+      description: You have been rated limited by the api (3 request every 30 seconds)
+      headers:
+        x-rate-limit-limit:
+          $ref: "#/components/headers/xratelimitlimit"
+        x-rate-limit-remaining:
+          $ref: "#/components/headers/xratelimitremaining"
+    ShieldsResponse:
+      description: Returns 302. A redirect to the image
+      headers:
+        location:
+          schema:
+            type: string
+            description: Url for the image
+  securitySchemes:
+    testApi:
+      type: apiKey
+      description: Chewey Bot api Key
+      name: Authorization
+      in: header
+  headers:
+    xratelimitlimit:
+      description: The number of allowed requests in the time limit
+      schema:
+        type: integer
+    xratelimitremaining:
+      description: The number of requests left in the time limit
+      schema:
+        type: integer
+  parameters:
+    userID:
+      name: userID
+      in: path
+      description: The user ID for the owner of the token
+      required: true
+      allowEmptyValue: false
+      schema:
+        type: string
+        format: Snowflake
+    format:
+      name: format
+      in: path
+      description: "The format of the image."
+      required: false
+      allowEmptyValue: true
+      schema:
+        default: PNG
+        type: string
+        enum:
+          - SVG
+          - PNG
+paths:
+  /random:
+    get:
+      summary: Returns a random image from the api
+      tags:
+        - Images
+      responses:
+        "200":
+          description: The image data being returned
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    format: uri
+                    description: The url for the image
+                  type:
+                    type: string
+                    description: The endpoint for the image
+                    enum:
+                      - birb
+                      - car
+                      - cat
+                      - dog
+                      - duck
+                      - fantasy-art
+                      - fox
+                      - koala
+                      - nature
+                      - otter
+                      - owl
+                      - panda
+                      - plane
+                      - rabbit
+                      - red-panda
+                      - snake
+                      - space
+                      - turtle
+                      - wolf
+          headers:
+            x-rate-limit-limit:
+              $ref: "#/components/headers/xratelimitlimit"
+            x-rate-limit-remaining:
+              $ref: "#/components/headers/xratelimitremaining"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /birb:
+    get:
+      summary: Returns a random birb image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /car:
+    get:
+      summary: Returns a random car image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /cat:
+    get:
+      summary: Returns a random cat image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /dog:
+    get:
+      summary: Returns a random dog image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /duck:
+    get:
+      summary: Returns a random duck image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /fantasy-art:
+    get:
+      summary: Returns a random fantasy art image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /fox:
+    get:
+      summary: Returns a random fox image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /koala:
+    get:
+      summary: Returns a random koala image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /nature:
+    get:
+      summary: Returns a random nature image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /otter:
+    get:
+      summary: Returns a random otter image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /owl:
+    get:
+      summary: Returns a random owl image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /panda:
+    get:
+      summary: Returns a random panda image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /plane:
+    get:
+      summary: Returns a random plane image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /rabbit:
+    get:
+      summary: Returns a random rabbit image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /red-panda:
+    get:
+      summary: Returns a random red panda image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /snake:
+    get:
+      summary: Returns a random snake image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /space:
+    get:
+      summary: Returns a random space image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /turtle:
+    get:
+      summary: Returns a random turtle image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /wolf:
+    get:
+      summary: Returns a random wolf image
+      tags:
+        - Images
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+  /mcap/server/{IP}/{PORT}/{BackGround}:
+    get:
+      summary: Returns an image with information about a minecraft
+      tags:
+        - Other
+      parameters:
+        - name: IP
+          in: path
+          required: true
+          description: IP of the minecraft server
+          schema:
+            type: string
+            example: 127.0.0.1
+        - name: PORT
+          in: path
+          required: true
+          description: Port of the minecraft server
+          schema:
+            type: integer
+        - name: BackGround
+          in: path
+          required: false
+          description: "The background for the image"
+          allowEmptyValue: true
+          schema:
+            default: default
+            enum:
+              - default
+              - nether
+              - night
+              - sunset
+      responses:
+        default:
+          $ref: "#/components/responses/GeneralResponse"
+  /analytics/post:
+    post:
+      summary: Post Discord Bot analytics
+      tags:
+        - Analytics
+      requestBody:
+        description: Post analytics for the bot to the api
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                servers:
+                  type: integer
+                  format: int32
+                  description: The number of servers the bot is in
+                users:
+                  type: integer
+                  format: int32
+                  description: The number of users the bot can see
+                channels:
+                  type: integer
+                  format: int32
+                  description: The number of channels the bot can see
+                sent_messages:
+                  type: integer
+                  format: int32
+                  description: The number of messages the bot has sent
+                received_messages:
+                  type: integer
+                  format: int32
+                  description: The number of messages the bot has received
+                ram_used:
+                  type: integer
+                  format: int32
+                  description: The amount of ram the bot is using
+      responses:
+        "200":
+          description: Server acknowledging the request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    description: The server acknowledging the request
+          headers:
+            x-rate-limit-limit:
+              $ref: "#/components/headers/xratelimitlimit"
+            x-rate-limit-remaining:
+              $ref: "#/components/headers/xratelimitremaining"
+        "403":
+          $ref: "#/components/responses/InvaildToken"
+        "429":
+          description: Rate limit response
+          headers:
+            x-rate-limit-limit:
+              $ref: "#/components/headers/xratelimitlimit"
+            x-rate-limit-remaining:
+              $ref: "#/components/headers/xratelimitremaining"
+  /analytics/getlatest/{userID}:
+    get:
+      summary: Get the most recent report of stats
+      tags:
+        - Analytics
+      parameters:
+        - $ref: "#/components/parameters/userID"
+      responses:
+        "429":
+          $ref: "#/components/responses/AnalyticsRateLimit"
+        default:
+          $ref: "#/components/responses/AnalyticsResponse"
+  /analytics/getday/{userID}:
+    get:
+      summary: Get the stats from the past ~24 hours
+      tags:
+        - Analytics
+      parameters:
+        - $ref: "#/components/parameters/userID"
+      responses:
+        "429":
+          $ref: "#/components/responses/AnalyticsRateLimit"
+        default:
+          $ref: "#/components/responses/AnalyticsResponseArray"
+  /analytics/gethistory/{userID}:
+    get:
+      summary: Get all daily stats from the first date of stats
+      tags:
+        - Analytics
+      parameters:
+        - $ref: "#/components/parameters/userID"
+      responses:
+        "429":
+          $ref: "#/components/responses/AnalyticsRateLimit"
+        default:
+          description: The default response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AnalyticsData"
+  /analytics/infocard/{userID}:
+    get:
+      summary: Get info card
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+      responses:
+        "200":
+          $ref: "#/components/responses/ImageResponse"
+  /analytics/getshield/{userID}/servers/{format}:
+    get:
+      summary: Get stats for servers
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+        - $ref: "#/components/parameters/format"
+      responses:
+        default:
+          $ref: "#/components/responses/ShieldsResponse"
+  /analytics/getshield/{userID}/users/{format}:
+    get:
+      summary: Get stats for users
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+        - $ref: "#/components/parameters/format"
+      responses:
+        default:
+          $ref: "#/components/responses/ShieldsResponse"
+  /analytics/getshield/{userID}/channels/{format}:
+    get:
+      summary: Get stats for channels
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+        - $ref: "#/components/parameters/format"
+      responses:
+        default:
+          $ref: "#/components/responses/ShieldsResponse"
+  /analytics/getshield/{userID}/sent_messages/{format}:
+    get:
+      summary: Get stats for sent messages
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+        - $ref: "#/components/parameters/format"
+      responses:
+        default:
+          $ref: "#/components/responses/ShieldsResponse"
+  /analytics/getshield/{userID}/received_messages/{format}:
+    get:
+      summary: Get stats for received messages
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+        - $ref: "#/components/parameters/format"
+      responses:
+        default:
+          $ref: "#/components/responses/ShieldsResponse"
+  /analytics/getshield/{userID}/ram_used/{format}:
+    get:
+      summary: Get stats for ram usage
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+        - $ref: "#/components/parameters/format"
+      responses:
+        default:
+          $ref: "#/components/responses/ShieldsResponse"
+  /analytics/getshield/{userID}/created/{format}:
+    get:
+      summary: Get the date of the recent stats
+      tags:
+        - Shields
+      parameters:
+        - $ref: "#/components/parameters/userID"
+        - $ref: "#/components/parameters/format"
+      responses:
+        default:
+          $ref: "#/components/responses/ShieldsResponse"
