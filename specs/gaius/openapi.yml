@@ -34,6 +34,7 @@ components:
           - `wordlists`
           - `notes`
           - `info`
+          - `modlogs`
 
   responses:
     unauthorised:
@@ -65,6 +66,11 @@ tags:
     x-displayName: Warnings Endpoints
     externalDocs:
       url: https://discord.com/channels/270438133584232449/914296262520627290/951126712152903771
+  - name: modlogs
+    description: Endpoints for modlogs
+    x-displayName: Modlogs
+    externalDocs:
+      url: https://canary.discord.com/channels/270438133584232449/914296262520627290/1229913800094777384
   - name: notes
     description: Endpoints for fetching user notes
     x-displayName: Note Endpoints
@@ -358,7 +364,7 @@ paths:
           content:
             application/json:
               schema:
-                oneOf:
+                allOf:
                   - $ref: "./components/schemas.yml#/caseLog"
                   - type: object
                     properties:
@@ -366,23 +372,20 @@ paths:
                         type: string
                         format: integer
                         summary: The number of cases in the server
-  /caselogs/{query}:
+  /caselogs/{UserID}:
     parameters:
-      - name: query
+      - name: UserID
         in: path
-        description: Either a User ID or warning ID
+        description: Either a User ID
         schema:
-          oneOf:
-            - type: string
-              format: "Snowflake"
-              description: User ID
-            - type: integer
-              description: Warn ID
+          type: string
+          format: "Snowflake"
+          description: User ID
     get:
       tags:
         - caselogs
-      summary: Fetch caselog with ID
-      description: Fetch all caselogs for a user ID or the caselog with the corresponding ID
+      summary: Fetch caselogs for user with their ID
+      description: Fetch all caselogs for a user ID
       security:
         - apiKey:
             - caselogs
@@ -594,6 +597,50 @@ paths:
                 type: array
                 items:
                   $ref: "./components/schemas.yml#/warnings"
+
+  /modlogs/all:
+    get:
+      tags:
+        - modlogs
+      summary: Fetch all modlogs
+      security:
+        - apiKey:
+            - modlogs
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/modLog"
+  /modlogs/{UserID}:
+    parameters:
+      - name: UserID
+        in: path
+        description: Either a User ID
+        schema:
+          type: string
+          format: "Snowflake"
+          description: User ID
+    get:
+      tags:
+        - modlogs
+      summary: Fetch modlogs for user with their ID
+      description: Fetch all modlogs for a user ID
+      security:
+        - apiKey:
+            - modlogs
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/modLog"
 
   /notes/all:
     get:

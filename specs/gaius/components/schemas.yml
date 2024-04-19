@@ -10,7 +10,7 @@ wordlist:
         type: array
         items:
           type: string
-userCaselog:
+modLog:
   type: object
   additionalProperties:
     description: "The case ID as the index"
