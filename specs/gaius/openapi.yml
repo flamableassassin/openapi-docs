@@ -358,7 +358,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./components/schemas.yml#/userCaselog"
+                oneOf:
+                  - $ref: "./components/schemas.yml#/userCaselog"
+                  - type: object
+                    properties:
+                      totalCases:
+                        type: string
+                        format: integer
+                        summary: The number of cases in the server
   /caselogs/{query}:
     parameters:
       - name: query
