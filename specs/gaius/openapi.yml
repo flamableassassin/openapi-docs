@@ -3,7 +3,7 @@ servers:
   - url: https://api.gaiusbot.me
 info:
   title: Unofficial API Docs for Gaius Discord Bots
-  version: "1.0"
+  version: "1.1"
   license:
     name: MIT
     url: https://mit-license.org/
