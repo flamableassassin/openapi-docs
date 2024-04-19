@@ -623,7 +623,7 @@ paths:
               format: "Snowflake"
               description: User ID
             - type: integer
-              description: Warn ID
+              description: Note ID
     get:
       tags:
         - notes
