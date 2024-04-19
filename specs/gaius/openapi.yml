@@ -359,7 +359,7 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: "./components/schemas.yml#/userCaselog"
+                  - $ref: "./components/schemas.yml#/caseLog"
                   - type: object
                     properties:
                       totalCases:
@@ -394,7 +394,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "./components/schemas.yml#/userCaselog"
+                $ref: "./components/schemas.yml#/caseLog"
   /caselogs/after/{Time}:
     parameters:
       - name: Time
@@ -493,7 +493,7 @@ paths:
     parameters:
       - name: query
         in: path
-        description: Either a User ID or warning ID
+        description: Either a User ID or note ID
         schema:
           oneOf:
             - type: string
