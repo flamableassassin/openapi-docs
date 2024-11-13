@@ -1,0 +1,81 @@
+Max:
+  name: max
+  in: query
+  description: The maximum number of elements to return
+  schema:
+    type: number
+    maximum: 200
+    minimum: 1
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/pagination.md
+
+Offset:
+  name: offset
+  in: query
+  description: Advance to the next set of elements
+  schema:
+    type: number
+    minimum: 0
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/pagination.md
+
+OrderDirection:
+  name: direction
+  in: query
+  description: The direction to sort the results
+  schema:
+    type: string
+    enum:
+      - asc
+      - desc
+
+TopN:
+  name: top
+  in: query
+  description: Only return the top N places
+  schema:
+    type: number
+
+Skip-Empty:
+  name: skip-empty
+  in: query
+  description: Skips empty values
+  schema:
+    type: boolean
+
+Miscellaneous:
+  name: miscellaneous
+  description: |
+    Query Parameter   | Type   | Description
+    ----------------- | ------ | -----------------------------------------
+    ``miscellaneous`` | bool   | when given, filters (out) misc categories
+  in: query
+  schema:
+    type: boolean
+
+OrderbyName:
+  name: orderby
+  in: query
+  description: |
+    order by           | Description
+    ------------------ | ------------------------------------------------------------------
+    ``name`` (default) | sorts alphanumerically by the name
+  schema:
+    type: string
+    default: name
+    enum:
+      - name
+
+Platform:
+  name: platform
+  in: query
+  description: Platform ID; when given, restricts to that platform
+  schema:
+    type: string
+
+Region:
+  name: region
+  in: query
+  description: Region ID; when given, restricts to that region
+  schema:
+    type: string

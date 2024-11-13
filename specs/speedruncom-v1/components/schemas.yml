@@ -1,0 +1,1975 @@
+Category:
+  x-tags:
+    - categories
+  example:
+    {
+      "id": "jkh473tf",
+      "name": "Any%",
+      "weblink": "https://www.speedrun.com/tww#Anypc",
+      "type": "per-game",
+      "rules": "Yada Yada Yada",
+      "players": { "type": "exactly", "value": 2 },
+      "miscellaneous": false,
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/categories/jkh473tf",
+          },
+          {
+            "rel": "game",
+            "uri": "https://www.speedrun.com/api/v1/games/i2grf78a",
+          },
+          {
+            "rel": "variables",
+            "uri": "https://www.speedrun.com/api/v1/games/i2grf78a/variables",
+          },
+          {
+            "rel": "runs",
+            "uri": "https://www.speedrun.com/api/v1/runs?category=jkh473tf",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/categories.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+      description: Values can vary in length
+    name:
+      type: string
+    weblink:
+      type: string
+      format: uri
+      description: The URL to the category leaderboard on the website
+    type:
+      type: string
+      description: Categories are either per-game or per-level (if the game uses individual levels)
+      enum:
+        - per-game
+        - per-level
+    rules:
+      type: string
+      description: Freeform text with some basic, undocumented speedrun.com markup
+    players:
+      description: Players is the number of participants per run in this category.
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - exactly
+            - up-to
+        value:
+          type: integer
+    miscellaneous:
+      description: Miscellaneous categories are usually not shown directly on the leaderboards, but are otherwise nothing special
+      type: boolean
+    links:
+      $ref: "#/Links"
+  required:
+    - id
+    - name
+    - weblink
+    - type
+    - rules
+    - players
+    - miscellaneous
+    - links
+
+Developer:
+  x-tags:
+    - developers
+  example:
+    {
+      "id": "l4eprzro",
+      "name": "Arkane Studios",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/developers/l4eprzro",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?developer=l4eprzro",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/developers.md#structure
+  allOf:
+    - $ref: "#/Base"
+
+Engine:
+  x-tags:
+    - engines
+  example:
+    {
+      "id": "p85eo036",
+      "name": "Build",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/engines/p85eo036",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?engine=p85eo036",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/engines.md#structure
+  allOf:
+    - $ref: "#/Base"
+
+Game:
+  x-tags:
+    - games
+  example:
+    {
+      "id": "1kgr75w4",
+      "names":
+        {
+          "international": "Super Mario Sunshine",
+          "japanese": "スーパーマリオサンシャイン",
+          "twitch": "Super Mario Sunshine",
+        },
+      "abbreviation": "sms",
+      "weblink": "https://www.speedrun.com/sms",
+      "released": 2002,
+      "release-date": "2002-08-26",
+      "ruleset":
+        {
+          "show-milliseconds": false,
+          "require-verification": true,
+          "require-video": false,
+          "run-times": ["realtime", "realtime_noloads"],
+          "default-time": "realtime",
+          "emulators-allowed": false,
+        },
+      "romhack": false,
+      "gametypes": [],
+      "platforms": ["039or978", "hdzate15"],
+      "regions": ["hdz48alk", "hdz1hdwo", "9uhjgcgg"],
+      "genres": [],
+      "engines": [],
+      "developers": [],
+      "publishers": [],
+      "moderators": { "wzx7q875": "moderator", "zzb12med": "super-moderator" },
+      "created": "2014-12-07T12:50:20Z",
+      "assets":
+        {
+          "logo":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/logo.png",
+              "width": 180,
+              "height": 34,
+            },
+          "cover-tiny":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-32.png",
+              "width": 32,
+              "height": 45,
+            },
+          "cover-small":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-64.png",
+              "width": 64,
+              "height": 90,
+            },
+          "cover-medium":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-128.png",
+              "width": 128,
+              "height": 180,
+            },
+          "cover-large":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-256.png",
+              "width": 256,
+              "height": 360,
+            },
+          "icon":
+            {
+              "uri": "https://www.speedrun.com/themes/mario_kart/favicon.png",
+              "width": 44,
+              "height": 44,
+            },
+          "trophy-1st":
+            {
+              "uri": "https://www.speedrun.com/images/icons/goldtrophy.png",
+              "width": 16,
+              "height": 16,
+            },
+          "trophy-2nd":
+            {
+              "uri": "https://www.speedrun.com/images/icons/silvertrophy.png",
+              "width": 16,
+              "height": 16,
+            },
+          "trophy-3rd":
+            {
+              "uri": "https://www.speedrun.com/images/icons/bronzetrophy.png",
+              "width": 16,
+              "height": 16,
+            },
+          "trophy-4th": null,
+          "background":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/background.png",
+              "width": 151,
+              "height": 195,
+            },
+          "foreground": null,
+        },
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/games/1kgr75w4",
+          },
+          {
+            "rel": "runs",
+            "uri": "https://www.speedrun.com/api/v1/runs?game=1kgr75w4",
+          },
+          {
+            "rel": "levels",
+            "uri": "https://www.speedrun.com/api/v1/games/1kgr75w4/levels",
+          },
+          {
+            "rel": "categories",
+            "uri": "https://www.speedrun.com/api/v1/games/1kgr75w4/categories",
+          },
+          {
+            "rel": "variables",
+            "uri": "https://www.speedrun.com/api/v1/games/1kgr75w4/variables",
+          },
+          {
+            "rel": "records",
+            "uri": "https://www.speedrun.com/api/v1/games/1kgr75w4/records",
+          },
+          {
+            "rel": "series",
+            "uri": "https://www.speedrun.com/api/v1/series/rv7emz49",
+          },
+          {
+            "rel": "base-game",
+            "uri": "https://www.speedrun.com/api/v1/games/29d30dlp",
+          },
+          {
+            "rel": "derived-games",
+            "uri": "https://www.speedrun.com/api/v1/games/1kgr75w4/derived-games",
+          },
+          {
+            "rel": "romhacks",
+            "uri": "https://www.speedrun.com/api/v1/games/1kgr75w4/derived-games",
+          },
+          {
+            "rel": "leaderboard",
+            "uri": "https://www.speedrun.com/api/v1/leaderboards/1kgr75w4/category/n2y3r8do",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#structure
+  type: object
+  properties:
+    id:
+      description: Values can vary in length
+      type: string
+    names:
+      $ref: "#/GameNames"
+    abbreviation:
+      type: string
+      description: |
+        ** Do not ** use the abbreviation to manually construct a game's full web URL, instead always use the provided `weblink`. We might change the URL scheme on the frontend at any time without prior notice!
+    weblink:
+      description: Link to get to this game's page intended for humans, `links` are meant for the API client.
+      type: string
+      format: uri
+    released:
+      description: Legacy value that has been superseded by `release-date`.
+      type: integer
+      deprecated: true
+    release-date:
+      type: string
+      format: date
+    ruleset:
+      $ref: "#/Ruleset"
+    romhack:
+      description: Legacy value that has been superceded by `gametypes`.
+      type: boolean
+      deprecated: true
+    gametypes:
+      description: List of game types IDs set for the game. This list can be empty.
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/GameType"
+
+    platforms:
+      description: List of platform IDs the game can be played on. This list can be empty.
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/Platform"
+
+    regions:
+      description: List of region IDs the game is available in. This list can be empty.
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/Region"
+    genres:
+      description: List of genre IDs set for the game. This list can be empty.
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/Genre"
+    engines:
+      description: List of engine IDs set for the game. This list can be empty.
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/Engine"
+    developers:
+      description: List of developer IDs set for the game. This list can be empty.
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/Developer"
+    publishers:
+      description: List of publisher IDs set for the game. This list can be empty.
+      oneOf:
+        - type: array
+          items:
+            type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/Publisher"
+    moderators:
+      description: Mapping of user IDs to their roles within the game. Possible roles are moderator and super-moderator (super moderators can appoint other users as moderators).
+      oneOf:
+        - $ref: "#/Moderators"
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: "#/User"
+    created:
+      description: Can be null for games that have been added in the early days of speedrun.com.
+      oneOf:
+        - type: string
+          format: date-time
+        - type: "null"
+    assets:
+      description: Links to images that are used for that game on speedrun.com
+      type: object
+      properties:
+        logo:
+          $ref: "#/Asset"
+        cover-tiny:
+          $ref: "#/Asset"
+        cover-small:
+          $ref: "#/Asset"
+        cover-medium:
+          $ref: "#/Asset"
+        cover-large:
+          $ref: "#/Asset"
+        icon:
+          $ref: "#/Asset"
+        trophy-1st:
+          $ref: "#/Asset"
+        trophy-2nd:
+          $ref: "#/Asset"
+        trophy-3rd:
+          $ref: "#/Asset"
+        background:
+          oneOf:
+            - $ref: "#/Asset"
+            - type: "null"
+        trophy-4th:
+          oneOf:
+            - $ref: "#/Asset"
+            - type: "null"
+        foreground:
+          oneOf:
+            - $ref: "#/Asset"
+            - type: "null"
+    links:
+      description: |
+        `links.romhacks` is a legacy value. New code should use derived-games instead.
+        `links.series` can appear multiple times, as games can be in multiple series.
+      $ref: "#/Links"
+  required:
+    - id
+    - names
+    - abbreviation
+    - weblink
+    - released
+    - release-date
+    - ruleset
+    - romhack
+    - gametypes
+    - platforms
+    - regions
+    - genres
+    - engines
+    - developers
+    - publishers
+    - moderators
+    - created
+    - assets
+    - links
+
+Genre:
+  x-tags:
+    - genres
+  example:
+    {
+      "id": "qdnqyk28",
+      "name": "Metroidvania",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/genres/qdnqyk28",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?genre=qdnqyk28",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/genres.md#structure
+  allOf:
+    - $ref: "#/Base"
+
+Run:
+  x-tags:
+    - runs
+  example:
+    {
+      "id": "90y6pm7e",
+      "weblink": "https://www.speedrun.com/run/90y6pm7e",
+      "game": "29d30dlp",
+      "level": null,
+      "category": "nxd1rk8q",
+      "videos":
+        {
+          "text": "Part 1: http://youtube.com/videoidhere -- HYPE!!",
+          "links":
+            [
+              { "uri": "https://youtube.com/videoidhere" },
+              { "uri": "https://youtube.com/anothervideo" },
+            ],
+        },
+      "comment": "Lost 35 seconds on bridge swap, plus a bunch of time elsewhere. Part 2 is https://youtube.com/anothervideo",
+      "status":
+        {
+          "status": "verified",
+          "examiner": "61xymxr9",
+          "verify-date": "2015-05-23T16:12:32Z",
+        },
+      "players":
+        [
+          {
+            "rel": "user",
+            "id": "61xymxr9",
+            "uri": "https://www.speedrun.com/api/v1/users/61xymxr9",
+          },
+          {
+            "rel": "guest",
+            "name": "Betsruner",
+            "uri": "https://www.speedrun.com/api/v1/guests/Betsruner",
+          },
+        ],
+      "date": "2014-06-01",
+      "submitted": null,
+      "times":
+        {
+          "primary": "PT31M22S",
+          "primary_t": 1882,
+          "realtime": "PT31M22S",
+          "realtime_t": 1882,
+          "realtime_noloads": "PT41M26S",
+          "realtime_noloads_t": 2486,
+          "ingame": null,
+          "ingame_t": 0,
+        },
+      "system": { "platform": "rdjq4vwe", "emulated": false, "region": null },
+      "splits":
+        { "rel": "splits.io", "uri": "https://splits.io/api/v3/runs/55b" },
+      "values": { "wvn9wp51": "ezj43ozx" },
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/runs/90y6pm7e",
+          },
+          {
+            "rel": "game",
+            "uri": "https://www.speedrun.com/api/v1/games/29d30dlp",
+          },
+          {
+            "rel": "category",
+            "uri": "https://www.speedrun.com/api/v1/categories/nxd1rk8q",
+          },
+          {
+            "rel": "level",
+            "uri": "https://www.speedrun.com/api/v1/levels/hhzd4bym",
+          },
+          {
+            "rel": "platform",
+            "uri": "https://www.speedrun.com/api/v1/platforms/rdjq4vwe",
+          },
+          {
+            "rel": "examiner",
+            "uri": "https://www.speedrun.com/api/v1/users/61xymxr9",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+    weblink:
+      type: string
+      format: uri
+    game:
+      oneOf:
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Game"
+    level:
+      oneOf:
+        - type: "null"
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Level"
+    category:
+      oneOf:
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Category"
+    videos:
+      oneOf:
+        - type: "null"
+        - type: object
+          properties:
+            text:
+              type: string
+            links:
+              type: array
+              items:
+                type: object
+                properties:
+                  uri:
+                    type: string
+                    format: uri
+    comment:
+      type: string
+    status:
+      $ref: "#/RunStatus"
+    players:
+      oneOf:
+        - type: array
+          items:
+            type: object
+            properties:
+              rel:
+                type: string
+              id:
+                type: string
+              uri:
+                type: string
+                format: uri
+              name:
+                type: string
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                oneOf:
+                  - $ref: "#/Guest"
+                  - $ref: "#/User"
+    date:
+      oneOf:
+        - type: string
+          format: date
+        - type: "null"
+    submitted:
+      oneOf:
+        - type: string
+          format: date
+        - type: "null"
+    times:
+      $ref: "#/Time"
+    system:
+      type: object
+      properties:
+        platform:
+          oneOf:
+            - type: string
+            - type: object
+              properties:
+                data:
+                  $ref: "#/Platform"
+        emulated:
+          type: boolean
+        region:
+          oneOf:
+            - type: "null"
+            - type: string
+            - type: object
+              properties:
+                data:
+                  $ref: "#/Region"
+    splits:
+      oneOf:
+        - type: "null"
+        - type: object
+          properties:
+            rel:
+              type: string
+            uri:
+              type: string
+              format: uri
+    values:
+      description: Values is a mapping from variables to values
+      $ref: "#/VariableMapping"
+    links:
+      $ref: "#/Links"
+  required:
+    - id
+    - weblink
+    - game
+    - level
+    - category
+    - videos
+    - comment
+    - status
+    - players
+    - date
+    - submitted
+    - times
+    - system
+    - splits
+    - values
+    - links
+
+Level:
+  x-tags:
+    - levels
+  example:
+    {
+      "id": "ha71kldd",
+      "name": "Slip Slide Icecapades",
+      "weblink": "https://www.speedrun.com/twinsanity/Slip_Slide_Icecapades",
+      "rules": "Yada Yada Yada",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/levels/ha71kldd",
+          },
+          {
+            "rel": "game",
+            "uri": "https://www.speedrun.com/api/v1/games/sjkdzets",
+          },
+          {
+            "rel": "categories",
+            "uri": "https://www.speedrun.com/api/v1/levels/ha71kldd/categories",
+          },
+          {
+            "rel": "variables",
+            "uri": "https://www.speedrun.com/api/v1/levels/ha71kldd/variables",
+          },
+          {
+            "rel": "runs",
+            "uri": "https://www.speedrun.com/api/v1/runs?level=ha71kldd",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/levels.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    weblink:
+      type: string
+      format: uri
+    rules:
+      type: string
+    links:
+      $ref: "#/Links"
+  required:
+    - id
+    - name
+    - weblink
+    - rules
+    - links
+
+Leaderboard:
+  x-tags:
+    - leaderboards
+  example:
+    {
+      "data":
+        {
+          "weblink": "https://www.speedrun.com/aoe2/full_game#All_Campaigns",
+          "game": "xldev513",
+          "category": "rklg3rdn",
+          "level": null,
+          "platform": null,
+          "region": null,
+          "emulators": null,
+          "video-only": false,
+          "timing": "realtime",
+          "values": {},
+          "runs":
+            [
+              {
+                "place": 1,
+                "run":
+                  {
+                    "id": "yw1nj0nz",
+                    "weblink": "https://www.speedrun.com/aoe2/run/yw1nj0nz",
+                    "game": "xldev513",
+                    "level": null,
+                    "category": "rklg3rdn",
+                    "videos":
+                      {
+                        "links":
+                          [
+                            {
+                              "uri": "https://www.youtube.com/watch?v=F1z59gYX7Jk",
+                            },
+                          ],
+                      },
+                    "comment": "Bad levels:\r\nJoA5 - Transport ship never landed, so no trigger for the end never loaded?\r\nSala2 - Bad ships\r\nBB3  - Myself playing super bad\r\nAtt1 -  Destroy monastery then market. noted.\r\nMonte 2 - Bad luck on the red army killing my rams and bad play.\r\nHastings - Needed to play it on AoE2HD not AoC\r\nVindlandsaga - Longboats wrecked me.",
+                    "status":
+                      {
+                        "status": "verified",
+                        "examiner": "v18q6wjn",
+                        "verify-date": "2018-01-05T03:22:57Z",
+                      },
+                    "players":
+                      [
+                        {
+                          "rel": "user",
+                          "id": "18vqvejl",
+                          "uri": "https://www.speedrun.com/api/v1/users/18vqvejl",
+                        },
+                      ],
+                    "date": "2018-01-02",
+                    "submitted": "2018-01-02T22:04:03Z",
+                    "times":
+                      {
+                        "primary": "PT7H3M43S",
+                        "primary_t": 25423,
+                        "realtime": "PT7H3M43S",
+                        "realtime_t": 25423,
+                        "realtime_noloads": null,
+                        "realtime_noloads_t": 0,
+                        "ingame": null,
+                        "ingame_t": 0,
+                      },
+                    "system":
+                      {
+                        "platform": "8gej2n93",
+                        "emulated": false,
+                        "region": null,
+                      },
+                    "splits":
+                      {
+                        "rel": "splits.io",
+                        "uri": "https://splits.io/api/v3/runs/23gp",
+                      },
+                    "values": { "m5ly6jn4": "xqke89q9" },
+                  },
+              },
+              {
+                "place": 2,
+                "run":
+                  {
+                    "id": "pzgkj6ey",
+                    "weblink": "https://www.speedrun.com/aoe2/run/pzgkj6ey",
+                    "game": "xldev513",
+                    "level": null,
+                    "category": "rklg3rdn",
+                    "videos":
+                      {
+                        "links":
+                          [
+                            { "uri": "http://www.twitch.tv/adam_ak/v/4191464" },
+                            { "uri": "http://www.twitch.tv/adam_ak/v/4191449" },
+                          ],
+                      },
+                    "comment": "part 2: http://www.twitch.tv/adam_ak/v/4191464\r\n\r\nResult of the race with Mhmd and Dawned. Montezuma and BoC were a mess -- rest was OK. Will improve :v)",
+                    "status":
+                      {
+                        "status": "verified",
+                        "examiner": "v18q6wjn",
+                        "verify-date": "2015-05-10T12:09:40Z",
+                      },
+                    "players":
+                      [
+                        {
+                          "rel": "user",
+                          "id": "gpj0mxwr",
+                          "uri": "https://www.speedrun.com/api/v1/users/gpj0mxwr",
+                        },
+                      ],
+                    "date": "2015-04-11",
+                    "submitted": "2015-04-20T13:41:10Z",
+                    "times":
+                      {
+                        "primary": "PT27H55M24S",
+                        "primary_t": 100524,
+                        "realtime": "PT27H55M24S",
+                        "realtime_t": 100524,
+                        "realtime_noloads": null,
+                        "realtime_noloads_t": 0,
+                        "ingame": null,
+                        "ingame_t": 0,
+                      },
+                    "system":
+                      {
+                        "platform": "8gej2n93",
+                        "emulated": false,
+                        "region": null,
+                      },
+                    "splits": null,
+                    "values": { "m5ly6jn4": "p12z471x" },
+                  },
+              },
+            ],
+          "links":
+            [
+              {
+                "rel": "game",
+                "uri": "https://www.speedrun.com/api/v1/games/xldev513",
+              },
+              {
+                "rel": "category",
+                "uri": "https://www.speedrun.com/api/v1/categories/rklg3rdn",
+              },
+            ],
+        },
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#structure
+  type: object
+  properties:
+    weblink:
+      type: string
+      format: uri
+    game:
+      oneOf:
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Game"
+    category:
+      oneOf:
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Category"
+    level:
+      oneOf:
+        - type: "null"
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Level"
+    platform:
+      oneOf:
+        - type: "null"
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Platform"
+    region:
+      oneOf:
+        - type: "null"
+        - type: string
+        - type: object
+          properties:
+            data:
+              $ref: "#/Region"
+    emulators:
+      type: "null"
+    video-only:
+      type: boolean
+    timing:
+      type: string
+    values:
+      $ref: "#/VariableMapping"
+    runs:
+      type: array
+      items:
+        type: object
+        properties:
+          place:
+            type: integer
+          run:
+            oneOf:
+              #? Why it could be a string
+              # - type: string
+              - $ref: "#/Run"
+    links:
+      $ref: "#/Links"
+  required:
+    - weblink
+    - game
+    - category
+    - level
+    - platform
+    - region
+    - emulators
+    - video-only
+    - timing
+    - values
+    - runs
+    - links
+
+Notification:
+  x-tags:
+    - notifications
+  example:
+    {
+      "id": "p2p5rrle",
+      "created": "2015-01-25T11:55:15Z",
+      "status": "read",
+      "text": "Lighnat0r likes your post.",
+      "item": { "rel": "post", "uri": "https://www.speedrun.com/post/ptv8h" },
+      "links":
+        [
+          {
+            "rel": "run",
+            "uri": "https://www.speedrun.com/api/v1/runs/1wzpqgyq",
+          },
+          {
+            "rel": "game",
+            "uri": "https://www.speedrun.com/api/v1/games/nj1ne1p4",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/notifications.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+    created:
+      type: string
+      format: date-time
+    status:
+      type: string
+      enum:
+        - read
+        - unread
+    text:
+      type: string
+    item:
+      type: object
+      properties:
+        rel:
+          type: string
+          description: "There are four different kinds of items that are linked to a notification: `post` (someone liked the forum post), `run`, `game` (when a game request was approved/denied) and `guide` (when a guide was updated)."
+          enum:
+            - post
+            - run
+            - game
+            - guide
+        uri:
+          type: string
+          format: uri
+    links:
+      $ref: "#/Links"
+  required:
+    - id
+    - created
+    - status
+    - text
+    - item
+    - links
+
+RunStatus:
+  type: object
+  properties:
+    reason:
+      oneOf:
+        - type: string
+        - type: "null"
+    status:
+      type: string
+      enum:
+        - new
+        - verified
+        - rejected
+    examiner:
+      oneOf:
+        - type: string
+        - type: "null"
+    verify-date:
+      oneOf:
+        - type: "null"
+        - type: string
+          format: date-time
+  required:
+    - reason
+    - status
+    - examiner
+    - verify-date
+
+Time:
+  type: object
+  properties:
+    primary:
+      type: string
+      format: "ISO 8601 duration"
+    primary_t:
+      type: number
+    realtime:
+      oneOf:
+        - type: string
+          format: "ISO 8601 duration"
+        - type: "null"
+    realtime_t:
+      oneOf:
+        - type: "null"
+        - type: number
+    realtime_noloads:
+      oneOf:
+        - type: "null"
+        - type: string
+          format: "ISO 8601 duration"
+    realtime_noloads_t:
+      oneOf:
+        - type: "null"
+        - type: number
+    ingame:
+      oneOf:
+        - type: "null"
+        - type: string
+          format: "ISO 8601 duration"
+    ingame_t:
+      oneOf:
+        - type: "null"
+        - type: number
+  required:
+    - primary
+    - primary_t
+    - realtime
+    - realtime_t
+    - realtime_noloads
+    - realtime_noloads_t
+    - ingame
+    - ingame_t
+
+VariableMapping:
+  type: object
+  additionalProperties:
+    description: Mapping between variable ID and value ID
+    type: string
+
+Links:
+  description: Links for traversing the API or links to external sites (e.g for help in 404 response)
+  type: array
+  items:
+    type: object
+    properties:
+      rel:
+        type: string
+      uri:
+        type: string
+        format: uri
+    required:
+      - rel
+      - uri
+
+Guest:
+  x-tags:
+    - guests
+  example:
+    {
+      "name": "Alex",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/guests/Alex",
+          },
+          {
+            "rel": "runs",
+            "uri": "https://www.speedrun.com/api/v1/runs?guest=Alex",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/guests.md#structure
+  type: object
+  properties:
+    name:
+      type: string
+    links:
+      $ref: "#/Links"
+  required:
+    - name
+    - links
+
+Asset:
+  type: object
+  properties:
+    uri:
+      type: string
+      format: uri
+    width:
+      description: Pixel values
+      type: integer
+    height:
+      description: Pixel values
+      type: integer
+  required:
+    - uri
+    - width
+    - height
+
+Moderators:
+  type: object
+  additionalProperties:
+    x-additionalPropertiesName: "Moderator user ID "
+    description: The id of the moderator and their role
+    type: string
+    enum:
+      - moderator
+      - super-moderator
+
+GameNames:
+  type: object
+  properties:
+    international:
+      type: string
+    japanese:
+      description: The japanese title can be null.
+      oneOf:
+        - type: string
+        - type: "null"
+    twitch:
+      type: string
+  required:
+    - international
+    - japanese
+    - twitch
+
+Ruleset:
+  type: object
+  properties:
+    show-milliseconds:
+      type: boolean
+    require-verification:
+      type: boolean
+    require-video:
+      type: boolean
+    run-times:
+      description: List of times that can/should be given for any run of that game and can be contain any combination of realtime, realtime_noloads and ingame. The corresponding default-time determines which is the primary one.
+      type: array
+      items:
+        type: string
+        enum:
+          - realtime
+          - realtime_noloads
+          - ingame
+    default-time:
+      type: string
+    emulators-allowed:
+      type: boolean
+  required:
+    - show-milliseconds
+    - require-verification
+    - require-video
+    - run-times
+    - default-time
+    - emulators-allowed
+
+GameType:
+  x-tags:
+    - gametypes
+  example:
+    {
+      "id": "d91jd1ex",
+      "name": "Fangame",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/gametypes/d91jd1ex",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?gametype=d91jd1ex",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/gametypes.md#structure
+  allOf:
+    - $ref: "#/Base"
+
+Base:
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    links:
+      $ref: "#/Links"
+  required:
+    - id
+    - name
+    - links
+
+Platform:
+  x-tags:
+    - platforms
+  example:
+    {
+      "id": "rdjq4vwe",
+      "name": "Nintendo Entertainment System",
+      "released": 2002,
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/platforms/rdjq4vwe",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?platform=rdjq4vwe",
+          },
+          {
+            "rel": "runs",
+            "uri": "https://www.speedrun.com/api/v1/runs?platform=rdjq4vwe",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/platforms.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    released:
+      type: integer
+    links:
+      $ref: "#/Links"
+  required:
+    - id
+    - links
+    - name
+    - released
+
+Publisher:
+  x-tags:
+    - publishers
+  example:
+    {
+      "id": "1z6qgr9p",
+      "name": "Codemasters",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/publishers/1z6qgr9p",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?publisher=1z6qgr9p",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/publishers.md#structure
+  allOf:
+    - $ref: "#/Base"
+
+Region:
+  x-tags:
+    - regions
+  example:
+    {
+      "id": "pr184lqn",
+      "name": "USA / NTSC",
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/regions/pr184lqn",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?region=pr184lqn",
+          },
+          {
+            "rel": "runs",
+            "uri": "https://www.speedrun.com/api/v1/runs?region=pr184lqn",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/regions.md#structure
+  allOf:
+    - $ref: "#/Base"
+
+Series:
+  x-tags:
+    - series
+  example:
+    {
+      "id": "1kgr75w4",
+      "names": { "international": "Grand Theft Auto", "japanese": "" },
+      "abbreviation": "gta",
+      "weblink": "https://www.speedrun.com/gta",
+      "moderators": { "wzx7q875": "moderator", "zzb12med": "super-moderator" },
+      "created": "2014-12-07T12:50:20Z",
+      "assets":
+        {
+          "logo":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/logo.png",
+              "width": 180,
+              "height": 34,
+            },
+          "cover-tiny":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-32.png",
+              "width": 32,
+              "height": 45,
+            },
+          "cover-small":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-64.png",
+              "width": 64,
+              "height": 90,
+            },
+          "cover-medium":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-128.png",
+              "width": 128,
+              "height": 180,
+            },
+          "cover-large":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/cover-256.png",
+              "width": 256,
+              "height": 360,
+            },
+          "icon":
+            {
+              "uri": "https://www.speedrun.com/themes/mario_kart/favicon.png",
+              "width": 44,
+              "height": 44,
+            },
+          "trophy-1st":
+            {
+              "uri": "https://www.speedrun.com/images/icons/goldtrophy.png",
+              "width": 16,
+              "height": 16,
+            },
+          "trophy-2nd":
+            {
+              "uri": "https://www.speedrun.com/images/icons/silvertrophy.png",
+              "width": 16,
+              "height": 16,
+            },
+          "trophy-3rd":
+            {
+              "uri": "https://www.speedrun.com/images/icons/bronzetrophy.png",
+              "width": 16,
+              "height": 16,
+            },
+          "trophy-4th": null,
+          "background":
+            {
+              "uri": "https://www.speedrun.com/themes/mk64/background.png",
+              "width": 151,
+              "height": 195,
+            },
+          "foreground": null,
+        },
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/series/wnlod5vz",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/series/wnlod5vz/games",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/series.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+    names:
+      $ref: "#/GameNames"
+    abbreviation:
+      type: string
+    weblink:
+      type: string
+      format: uri
+    moderators:
+      oneOf:
+        - $ref: "#/Moderators"
+        - type: object
+          properties:
+            data:
+              items:
+                $ref: "#/User"
+    created:
+      oneOf:
+        - type: string
+          format: date-time
+        - type: "null"
+    assets:
+      $ref: "#/Asset"
+    links:
+      $ref: "#/Links"
+  required:
+    - abbreviation
+    - assets
+    - created
+    - id
+    - links
+    - moderators
+    - names
+    - weblink
+
+User:
+  x-tags:
+    - users
+    - profile
+  example:
+    {
+      "id": "kjpdr4jq",
+      "names": { "international": "chewdiggy", "japanese": null },
+      "weblink": "https://www.speedrun.com/user/chewdiggy",
+      "name-style":
+        {
+          "style": "solid",
+          "color": { "light": "#249BCE", "dark": "#44BBEE" },
+        },
+      "role": "user",
+      "signup": "2014-10-02T12:34:23Z",
+      "location":
+        {
+          "country":
+            {
+              "code": "GB",
+              "names":
+                { "international": "United Kingdom", "japanese": "イギリス" },
+            },
+          "region":
+            {
+              "code": "ENGLAND",
+              "names":
+                { "international": "England", "japanese": "イングランド" },
+            },
+        },
+      "twitch": { "uri": "https://www.twitch.tv/username" },
+      "hitbox": { "uri": "https://www.hitbox.tv/username" },
+      "youtube": { "uri": "https://www.youtube.com/oih2grfwezf782zroufiw" },
+      "twitter": { "uri": "https://www.twitter.com/username" },
+      "speedrunslive":
+        { "uri": "http://www.speedrunslive.com/profiles/#!/username" },
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/users/kjpdr4jq",
+          },
+          {
+            "rel": "runs",
+            "uri": "https://www.speedrun.com/api/v1/runs?user=kjpdr4jq",
+          },
+          {
+            "rel": "games",
+            "uri": "https://www.speedrun.com/api/v1/games?moderator=kjpdr4jq",
+          },
+          {
+            "rel": "personal-bests",
+            "uri": "https://www.speedrun.com/api/v1/users/kjpdr4jq/personal-bests",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/users.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+    names:
+      $ref: "#/BaseName"
+    weblink:
+      type: string
+      format: uri
+    name-style:
+      type: object
+      properties:
+        style:
+          type: string
+          enum:
+            - solid
+            - gradient
+        color:
+          type: object
+          properties:
+            light:
+              type: string
+            dark:
+              type: string
+          required:
+            - dark
+            - light
+      required:
+        - color
+        - style
+    role:
+      type: string
+      enum:
+        - banned
+        - user
+        - trusted
+        - moderator
+        - admin
+        - programmer
+    signup:
+      oneOf:
+        - type: "null"
+        - type: string
+          format: date-time
+    location:
+      oneOf:
+        - type: "null"
+        - type: object
+          properties:
+            country:
+              type: object
+              properties:
+                code:
+                  type: string
+                names:
+                  $ref: "#/BaseName"
+              required:
+                - code
+                - names
+            region:
+              oneOf:
+                - type: "null"
+                - type: object
+                  properties:
+                    code:
+                      type: string
+                    names:
+                      $ref: "#/BaseName"
+                  required:
+                    - code
+                    - names
+          required:
+            - country
+            - region
+
+    twitch:
+      $ref: "#/UserSocial"
+    hitbox:
+      $ref: "#/UserSocial"
+    youtube:
+      $ref: "#/UserSocial"
+    twitter:
+      $ref: "#/UserSocial"
+    speedrunslive:
+      $ref: "#/UserSocial"
+    links:
+      type: array
+      items:
+        $ref: "#/Links"
+  required:
+    - hitbox
+    - id
+    - links
+    - location
+    - name-style
+    - names
+    - role
+    - signup
+    - speedrunslive
+    - twitch
+    - twitter
+    - weblink
+    - youtube
+
+UserSocial:
+  oneOf:
+    - type: "null"
+    - type: object
+      properties:
+        uri:
+          type: string
+          format: uri
+      required:
+        - uri
+
+BaseName:
+  type: object
+  properties:
+    international:
+      type: string
+    japanese:
+      anyOf:
+        - type: "null"
+        - type: string
+  required:
+    - international
+    - japanese
+
+Variable:
+  x-tags:
+    - variables
+  example:
+    {
+      "id": "wzx7q875",
+      "name": "cc",
+      "category": null,
+      "scope": { "type": "full-game" },
+      "mandatory": true,
+      "user-defined": false,
+      "obsoletes": false,
+      "values":
+        {
+          "values":
+            {
+              "zdbx1h88":
+                {
+                  "label": "150cc",
+                  "rules": "do not cheat",
+                  "flags": { "miscellaneous": false },
+                },
+              "k1omees9":
+                {
+                  "label": "200cc",
+                  "rules": "do not cheat",
+                  "flags": { "miscellaneous": false },
+                },
+            },
+          "default": "zdbx1h88",
+        },
+      "is-subcategory": true,
+      "links":
+        [
+          {
+            "rel": "self",
+            "uri": "https://www.speedrun.com/api/v1/variables/wzx7q875",
+          },
+          {
+            "rel": "game",
+            "uri": "https://www.speedrun.com/api/v1/games/zate4l10",
+          },
+        ],
+    }
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/variables.md#structure
+  type: object
+  properties:
+    id:
+      type: string
+    name:
+      type: string
+    category:
+      oneOf:
+        - type: "null"
+        - type: "string"
+    scope:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - global
+            - full-game
+            - all-levels
+            - single-level
+        level:
+          type: string
+      required:
+        - type
+    mandatory:
+      type: boolean
+    user-defined:
+      type: boolean
+    obsoletes:
+      type: boolean
+    values:
+      type: object
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              label:
+                type: string
+              rules:
+                type: string
+              flags:
+                type: object
+                properties:
+                  miscellaneous:
+                    type: boolean
+                required:
+                  - miscellaneous
+            required:
+              - flags
+              - label
+              - rules
+
+        default:
+          oneOf:
+            - type: string
+            - type: "null"
+      required:
+        - default
+        - values
+    is-subcategory:
+      type: boolean
+    links:
+      $ref: "#/Links"
+  required:
+    - category
+    - id
+    - is-subcategory
+    - links
+    - mandatory
+    - name
+    - obsoletes
+    - scope
+    - user-defined
+    - values
+
+Pagination:
+  description: |
+    Collections like runs, games or users do not return all elements at once, but are limited to a
+    certain number per request. By default, you get **20 elements** per request, but you can increase
+    this limit **up to 200**.
+  externalDocs:
+    url: https://github.com/speedruncomorg/api/blob/master/version1/pagination.md
+  type: object
+  properties:
+    offset:
+      type: number
+    max:
+      type: number
+    size:
+      type: number
+    links:
+      $ref: "#/Links"
+
+# From https://github.com/speedruncomorg/api/blob/master/version1/json-schema/run-submit.json
+# & https://github.com/speedruncomorg/api/blob/master/version1/json-schema/definitions.json
+Run-Submit:
+  example:
+    {
+      "run":
+        {
+          "category": "<category ID>",
+          "level": "<level ID>",
+          "date": "YYYY-MM-DD",
+          "region": "<region ID>",
+          "platform": "<platform ID>",
+          "verified": false,
+          "times":
+            {
+              "realtime": 1234.56,
+              "realtime_noloads": 1200.10,
+              "ingame": 1150,
+            },
+          "players":
+            [
+              { "rel": "user", "id": "<user ID>" },
+              { "rel": "guest", "name": "unregistered username" },
+            ],
+          "emulated": false,
+          "video": "https://youtube.com/watch?v=mumblefoo",
+          "comment": "Most awesome run ever!",
+          "splitsio": "6vr",
+          "variables":
+            {
+              "<variable ID>": { "type": "user-defined", "value": "my value" },
+              "<variable ID 1>":
+                { "type": "pre-defined", "value": "<value ID>" },
+            },
+        },
+    }
+  type: object
+  required:
+    - category
+    - platform
+    - times
+  properties:
+    category:
+      $ref: "#/Encoded-id"
+    level:
+      $ref: "#/Encoded-id"
+    date:
+      type: string
+      format: date
+    region:
+      $ref: "#/Encoded-id"
+    platform:
+      $ref: "#/Encoded-id"
+    verified:
+      type: boolean
+      default: false
+    times:
+      type: object
+      minItems: 1
+      properties:
+        realtime:
+          type: number
+        realtime_noloads:
+          type: number
+        ingame:
+          type: number
+    players:
+      $ref: "#/Run-Submit-Player-List"
+    emulated:
+      type: boolean
+      default: false
+    video:
+      type: string
+      maxLength: 255
+    comment:
+      type: string
+      maxLength: 2000
+    splitsio:
+      type: string
+      maxLength: 50
+    variables:
+      type: object
+      additionalProperties:
+        x-additionalPropertiesName: variable id
+        type: object
+        required:
+          - type
+          - value
+        properties:
+          type:
+            type: string
+            enum:
+              - pre-defined
+              - user-defined
+          value:
+            type: string
+Encoded-id:
+  type: string
+  pattern: ^[a-z0-9]+$
+  maxLength: 50
+Run-Submit-Player-List:
+  type: array
+  minItems: 1
+  items:
+    type: object
+    oneOf:
+      - type: object
+        required:
+          - rel
+          - id
+        properties:
+          rel:
+            type: string
+            enum:
+              - user
+          id:
+            $ref: "#/Encoded-id"
+      - type: object
+        required:
+          - rel
+          - name
+        properties:
+          rel:
+            type: string
+            enum:
+              - guest
+          name:
+            type: string
+            minLength: 1

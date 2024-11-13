@@ -1,0 +1,2732 @@
+openapi: 3.1.0
+servers:
+  - url: https://www.speedrun.com/api/v1
+info:
+  title: Unofficial V1 API Docs for Speedrun.com
+  version: "1.0"
+  license:
+    name: MIT
+    url: https://mit-license.org/
+  description: |
+    # About
+    **Unofficial [Speedrun.com](https://Speedrun.com) API docs**
+    Built by [Flammableassassin](https://github.com/flamableassassin)
+
+    If you wish to contribute feel free to here [https://github.com/flamableassassin/openapi-docs/](https://github.com/flamableassassin/openapi-docs/tree/main/specs/speedruncom-v1)
+
+    The official docs are here: https://github.com/speedruncomorg/api
+
+    <br>
+
+    **This spec is based on my interpretation of the official docs**
+
+    In reality this spec is more than likely missing parameters, properties on schemas and endpoints. If you find one of these please open an issue or contribute via a pull request
+
+tags:
+  - name: categories
+    x-displayName: Categories
+    description: |
+      Categories are the different rulesets for speedruns. Categories are either `per-game` or `per-level` (if the game uses individual levels), both can be accessed via this resource.
+
+      This resource is meant to perform ID-based lookups. That's why there is no `GET /categories` to get a flat list of all categories across all games. If you want to get the categories for a game, use [GET /v1/games/{gameid}/categories](#tag/games/operation/get-gamesidcategories).
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/categories.md
+  - name: developers
+    x-displayName: Developers
+    description: Developers are the persons and/of studios responsible for developing [games](#tag/games), for example Acclaim Entertainment, Bethesda Softworks, Edmund McMillen etc.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/developers.md
+  - name: engines
+    x-displayName: Engines
+    description: Engines are software frameworks used in the creation of [games](#tag/games), for example the DOOM engine, Unreal Engine, Geo-Mod etc.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/engines.md
+  - name: games
+    x-displayName: Games
+    description: |
+      Games are the things [users](#tag/users) do speedruns in. Games are associated with [regions](#tag/regions) (US, Europe, ...), [platforms](#tag/platforms) (consoles, handhelds, ...), [genres](#tag/genres), [engines](#tag/engines), [developers](#tag/developers), [game types](#tag/gametypes), [publishers](#tag/publishers), [categories](#tag/categories), [levels](#tag/levels) and [custom variables](#tag/variables) (like speed=50/100/150cc in Mario Kart games).
+
+      Games that are not part of a [series](#tag/series) are categorized in the "N/A" series for backwards compatibility.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/games.md
+  - name: gametypes
+    x-displayName: Game Types
+    description: Game types are classifications for unofficial [games](#tag/games), for example ROM Hack, Fangame, Modification etc.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/gametypes.md
+  - name: genres
+    x-displayName: Genres
+    description: Genres are classifications for [games](#tag/games), for example Action, JRPG, Rogue-like etc.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/genres.md
+  - name: guests
+    x-displayName: Guests
+    description: Sometimes, speedrun.com has runs done by players that have no account on the site yet. These runners are called "guests" in the API. Except for a name, there is nothing we know about them.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/guests.md
+  - name: leaderboards
+    x-displayName: Leaderboards
+    description: Leaderboards contain non-obsolete [runs](#tag/runs), sorted by time descending. In contrast to raw runs, leaderboards are automatically grouped according to the game/category/level rules that the moderators have defined.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md
+  - name: levels
+    x-displayName: Levels
+    description: |
+      Levels are the stages/worlds/maps within a game. Not all [games](#tag/games) have levels.
+
+      This resource is meant to perform ID-based lookups. That's why there is no GET /levels to get a flat list of all levels across all games. To only get the levels for one game, use the [/levels](#tag/games/operation/get-gamesidlevels) collection on the game itself.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/levels.md
+  - name: notifications
+    x-displayName: Notifications
+    description: Notifications are system-generated messages sent to [users](#tag/users) when certain events concerning them happen on the site, like somebody liking a post or a [run](#tag/runs) being verified.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/notifications.md
+  - name: platforms
+    x-displayName: Platforms
+    description: Platforms are hardware devices that run [games](#tag/games), for example PC, NES, PS2 etc.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/platforms.md
+  - name: profile
+    x-displayName: Profile
+    description: |
+      The profile is the user resource of the currently authenticated [user](#tag/users). This is useful to see what user a given API key belongs to.
+
+      <SecurityDefinitions />
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/profile.md
+  - name: publishers
+    x-displayName: Publishers
+    description: Publishers are companies that publish (games)(#tag/games), for example Capcom, SEGA, Midway Games etc.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/publisher.md
+  - name: regions
+    x-displayName: Region
+    description: Regions represent the different distribution zones in which (games)(#tag/games) are published, for example the US, Europe or Japan.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/region.md
+  - name: runs
+    x-displayName: Runs
+    description: Runs are the meat of our business at speedrun.com. A run is a finished attempt to play a [game](#tag/games), adhering to that game's ruleset. Invalid attempts (use of cheats etc) or obsolete runs (the ones superseded by a better time by the same player(s) in the same ruleset) still count as runs and are available via API.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md
+  - name: series
+    x-displayName: Series
+    description: Series are collections of [games](#tag/games) that have been released in context to each other, for example the "GTA" series contains all the games of this franchise. As a series is most often formed after a number of games have been published, many games do not belong to a specific series and are therefore categorized in the "Other" series. As time progresses, games can be moved in their own series, so be prepared for the series-game relationship to change.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/series.md
+  - name: users
+    x-displayName: Users
+    description: |
+      Users are the individuals who have registered an account on speedrun.com. Users submit (their) [runs](#tag/runs) and moderate [games](#tag/games), besides other things that are not covered by this API (like writing posts in the forums).
+
+      The API only returns public user information, so things like the e-mail address, site settings etc. are not accessible.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/users.md
+  - name: variables
+    x-displayName: Variables
+    description: |
+      Variables are custom criteria to distinguish between [runs](#tag/runs) done in the same
+      [category](#tag/categories) or [level](#tag/levels). The speed in Mario Kart games (which can be
+      50cc, 100cc or 150cc) is an example for a variable that has 3 possible values.
+
+      Variables are defined per-game and can be applicable to either all runs for this game or just
+      full-game or individual-level (IL) runs. Variables can also be restricted to a category. It is
+      therefore important to understand how to get the correct set of variables:
+
+      * Use `GET` [/game/{id}/variables](#tag/games/operation/get-gamesidvariables) to get **all** defined variables of that game, no matter how they are configured.
+      * Use `GET` [/categories/{id}/variables](#tag/categories/operation/get-categoriesidvariables) to only get the variables that apply to the given category.
+      * Use `GET` [/levels/{id}/variables](#tag/levels/operation/get-levelsidvariables) to only get the variables that apply to the given level.
+    externalDocs:
+      url: https://github.com/speedruncomorg/api/blob/master/version1/variables.md
+
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: See the [official authentication docs](https://github.com/speedruncomorg/api/blob/master/authentication.md) for more info
+  responses:
+    ErrorResponse:
+      description: If there was an error to return to the client
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+                description: The error code
+              message:
+                type: string
+                description: about the error
+              links:
+                $ref: "./components/schemas.yml#/Links"
+            required:
+              - status
+              - message
+    Throttled:
+      description: Your IP has been ratelimited. See the [official docs](https://github.com/speedruncomorg/api/blob/master/throttling.md) for throttling for more info
+
+paths:
+  /categories/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a category
+        schema:
+          type: string
+
+    get:
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - game
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/categories.md#embeds
+
+      tags:
+        - categories
+      operationId: get-categoriesid
+      security:
+        - {}
+      summary: Retrieve a single category, identified by its ID
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/categories.md#get-categoriesid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Category"
+  /categories/{id}/variables:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a category
+        schema:
+          type: string
+    get:
+      parameters:
+        - name: orderby
+          in: query
+          description: |
+            Order by          | Description
+            ----------------- | ------------------------------------------------------------------
+            ``name``          | sorts alphanumerically by the variable name
+            ``mandatory``     | sorts by mandatory flag
+            ``user-defined``  | sorts by user-defined flag
+            ``pos`` (default) | uses the order as defined by the game moderator
+          schema:
+            type: string
+            default: pos
+            enum:
+              - name
+              - mandatory
+              - user-defined
+              - pos
+
+        - $ref: "components/parameters.yml#/OrderDirection"
+
+      tags:
+        - categories
+      operationId: get-categoriesidvariables
+      security:
+        - {}
+      summary: Retrieve all variables that are applicable to the given category
+      description: |
+        This will retrieve all variables that are *applicable* to the given category.
+          
+        * ``per-level`` categories will not show the variables for runs completing the entire game.
+        * ``per-game`` categories will not show the variables for individual level runs.
+
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/categories.md#get-categoriesidvariables
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The variables for the category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Variable"
+  /categories/{id}/records:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a category
+        schema:
+          type: string
+    get:
+      parameters:
+        - $ref: "./components/parameters.yml#/TopN"
+        - $ref: "./components/parameters.yml#/Skip-Empty"
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - game
+                - category
+                - level
+                - players
+                - regions
+                - platforms
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#embeds
+
+      tags:
+        - categories
+      operationId: get-categoriesidrecords
+      security:
+        - {}
+      summary: Retrieve the records of the given category.
+      description: |
+        This will retrieve the records (first three places) of the given category.
+        If it's a full-game category, the result will be a list containing one leaderboard, otherwise the result will contain one leaderboard for each level of the game the category belongs to.
+
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/categories.md#get-categoriesidrecords
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The records for the category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Leaderboard"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+
+  /developers:
+    get:
+      security:
+        - {}
+      operationId: get-developers
+      summary: Get all developers
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/developers.md#get-developers
+      tags:
+        - developers
+      parameters:
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - name: orderby
+          in: query
+          description: |
+            order by           | Description
+            ------------------ | ------------------------------------------------------------------
+            ``name`` (default) | sorts alphanumerically by the developer name
+          schema:
+            type: string
+            default: name
+            enum:
+              - name
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the developers paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Developer"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /developers/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a developer
+        schema:
+          type: string
+
+    get:
+      tags:
+        - developers
+      operationId: get-developersid
+      security:
+        - {}
+      summary: Retrieve a single developer by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/developers.md#get-developersid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The developer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Developer"
+
+  /engines:
+    get:
+      security:
+        - {}
+      operationId: get-engines
+      summary: Get all engines
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/engines.md#get-engines
+      tags:
+        - engines
+      parameters:
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/OrderbyName"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the engines paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Engine"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /engines/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a engine
+        schema:
+          type: string
+
+    get:
+      tags:
+        - engines
+      operationId: get-enginesid
+      security:
+        - {}
+      summary: Retrieve a single engine by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/engines.md#get-enginesid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The engine
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Engine"
+
+  /games:
+    get:
+      security:
+        - {}
+      operationId: get-games
+      summary: Get all games
+      description: |
+        Note that giving invalid values for platform, region or moderator will result in an HTTP 404 error instead of an empty list. This is on purpose, because asking to filter by non-existing elements should be something an API client should notice.
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#get-games
+      tags:
+        - games
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - levels
+                - categories
+                - moderators
+                - gametypes
+                - platforms
+                - regions
+                - genres
+                - engines
+                - developers
+                - publishers
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#embeds
+
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/Platform"
+        - $ref: "./components/parameters.yml#/Region"
+        - name: orderby
+          in: query
+          description: |
+            order by               | Description
+            ---------------------- | ------------------------------------------------------------------
+            ``name.int`` (default) | sorts alphanumerically by the international name
+            ``name.jap``           | sorts alphanumerically by the japanese name
+            ``abbreviation``       | sorts alphanumerically by the abbreviation
+            ``released``           | sorts by the release date
+            ``created``            | sorts by the date when the game was added on speedrun.com
+            ``similarity``         | sorts by string similarity; *only available when searching games by name*; *default when searching by name*
+          schema:
+            type: string
+            default: name.int
+            enum:
+              - name.int
+              - name.jap
+              - abbreviation
+              - released
+              - created
+              - similarity
+        - name: name
+          in: query
+          description: When given, performs a fuzzy search across game names and abbreviations
+          schema:
+            type: string
+        - name: abbreviation
+          in: query
+          description: When given, performs an exact-match search for this abbreviation
+          schema:
+            type: string
+        - name: released
+          in: query
+          description: When given, restricts to games released in that year
+          schema:
+            type: number
+        - name: gametype
+          in: query
+          description: Game type ID; when given, restricts to that game type
+          schema:
+            type: string
+        - name: genre
+          in: query
+          description: Genre ID; when given, restricts to that genre
+          schema:
+            type: string
+        - name: engine
+          in: query
+          description: Engine ID; when given, restricts to that engine
+          schema:
+            type: string
+        - name: developer
+          in: query
+          description: Developer ID; when given, restricts to that developer
+          schema:
+            type: string
+        - name: publisher
+          in: query
+          description: Publisher ID; when given, restricts to that publisher
+          schema:
+            type: string
+        - name: moderator
+          in: query
+          description: Moderator ID; when given, only games moderated by that user will be returned
+          schema:
+            type: string
+        - name: romhack
+          in: query
+          deprecated: true
+          description: Legacy parameter, do not use this in new code; whether or not to include games with game types (if this parameter is not set, game types are included; if it is set to a true value, only games with game types will be returned, otherwise only games without game types are returned)
+          schema:
+            type: boolean
+        - name: _bulk
+          in: query
+          description: Enable [bulk access](https://github.com/speedruncomorg/api/blob/master/version1/games.md#bulk-access)
+          schema:
+            type: boolean
+
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the engines paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Game"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /games/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a game or its abbreviation
+        schema:
+          type: string
+
+    get:
+      tags:
+        - games
+      operationId: get-gamesid
+      security:
+        - {}
+      summary: Retrieve a single game by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#get-gamesid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The game
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Game"
+  /games/{id}/categories:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a game or its abbreviation
+        schema:
+          type: string
+
+    get:
+      parameters:
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/Miscellaneous"
+        - name: orderby
+          in: query
+          description: |
+            Order by          | Description
+            ----------------- | ------------------------------------------------------------------
+            ``name``          | sorts alphanumerically by the category name
+            ``miscellaneous`` | sorts by miscellaneous flag
+            ``pos`` (default) | uses the order as defined by the game moderator
+          schema:
+            type: string
+            default: pos
+            enum:
+              - name
+              - pos
+              - miscellaneous
+      tags:
+        - games
+      operationId: get-gamesidcategories
+      security:
+        - {}
+      summary: Retrieve all categories of a given game
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#get-gamesidcategories
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The Category
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Category"
+  /games/{id}/levels:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a game or its abbreviation
+        schema:
+          type: string
+
+    get:
+      parameters:
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - name: orderby
+          in: query
+          description: |
+            Order by          | Description
+            ----------------- | ------------------------------------------------------------------
+            ``name``          | sorts alphanumerically by the level name
+            ``pos`` (default) | uses the order as defined by the game moderator
+          schema:
+            type: string
+            default: pos
+            enum:
+              - name
+              - pos
+      tags:
+        - games
+      operationId: get-gamesidlevels
+      security:
+        - {}
+      summary: Retrieve all levels of a given game
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#get-gamesidvariables
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The Level
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Level"
+  /games/{id}/variables:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a game or its abbreviation
+        schema:
+          type: string
+
+    get:
+      parameters:
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - name: orderby
+          in: query
+          description: |
+            order by          | Description
+            ----------------- | ------------------------------------------------------------------
+            ``name``          | sorts alphanumerically by the variable name
+            ``mandatory``     | sorts by mandatory flag
+            ``user-defined``  | sorts by user-defined flag
+            ``pos`` (default) | uses the order as defined by the game moderator
+          schema:
+            type: string
+            default: pos
+            enum:
+              - name
+              - mandatory
+              - user-defined
+              - pos
+      tags:
+        - games
+      operationId: get-gamesidvariables
+      security:
+        - {}
+      summary: Retrieve all variables of a given game
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#get-gamesidvariables
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The variables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Variable"
+  /games/{id}/derived-games:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a game or its abbreviation
+        schema:
+          type: string
+
+    get:
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - levels
+                - categories
+                - moderators
+                - gametypes
+                - platforms
+                - regions
+                - genres
+                - engines
+                - developers
+                - publishers
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#embeds
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - name: orderby
+          in: query
+          description: |
+            order by               | Description
+            ---------------------- | ------------------------------------------------------------------
+            ``name.int`` (default) | sorts alphanumerically by the international name
+            ``name.jap``           | sorts alphanumerically by the japanese name
+            ``abbreviation``       | sorts alphanumerically by the abbreviation
+            ``released``           | sorts by the release date
+            ``created``            | sorts by the date when the game was added on speedrun.com
+            ``similarity``         | sorts by string similarity; *only available when searching games by name*; *default when searching by name*
+          schema:
+            type: string
+            default: name.int
+            enum:
+              - name.int
+              - name.jap
+              - abbreviation
+              - released
+              - created
+              - similarity
+        - name: name
+          in: query
+          description: When given, performs a fuzzy search across game names and abbreviations
+          schema:
+            type: string
+        - name: abbreviation
+          in: query
+          description: When given, performs an exact-match search for this abbreviation
+          schema:
+            type: string
+        - name: released
+          in: query
+          description: When given, restricts to games released in that year
+          schema:
+            type: number
+        - name: gametype
+          in: query
+          description: Game type ID; when given, restricts to that game type
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: Platform ID; when given, restricts to that platform
+          schema:
+            type: string
+        - name: region
+          in: query
+          description: Region ID; when given, restricts to that region
+          schema:
+            type: string
+        - name: genre
+          in: query
+          description: Genre ID; when given, restricts to that genre
+          schema:
+            type: string
+        - name: engine
+          in: query
+          description: Engine ID; when given, restricts to that engine
+          schema:
+            type: string
+        - name: developer
+          in: query
+          description: Developer ID; when given, restricts to that developer
+          schema:
+            type: string
+        - name: publisher
+          in: query
+          description: Publisher ID; when given, restricts to that publisher
+          schema:
+            type: string
+        - name: moderator
+          in: query
+          description: Moderator ID; when given, only games moderated by that user will be returned
+          schema:
+            type: string
+        - name: _bulk
+          in: query
+          description: Enable [bulk access](https://github.com/speedruncomorg/api/blob/master/version1/games.md#bulk-access)
+          schema:
+            type: boolean
+
+      tags:
+        - games
+      operationId: get-gamesidderived-games
+      security:
+        - {}
+      summary: Retrieve all games that have the given game
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#get-gamesidderived-games
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The games
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Game"
+  /games/{id}/records:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a game or its abbreviation
+        schema:
+          type: string
+
+    get:
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - game
+                - category
+                - level
+                - players
+                - regions
+                - platforms
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#embeds
+
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Miscellaneous"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/TopN"
+        - $ref: "./components/parameters.yml#/Skip-Empty"
+        - name: scope
+          in: query
+          description: when set to full-game, only full-game categories will be included; when set to levels, only individual levels are returned; default is all
+          schema:
+            type: string
+            default: all
+            enum:
+              - full-game
+              - levels
+              - all
+
+      tags:
+        - games
+      operationId: get-gamesidrecords
+      security:
+        - {}
+      summary: Retrieve the records for every (category,level) combination of the given game.
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#get-gamesidrecords
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The games
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Leaderboard"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+
+  /gametypes:
+    get:
+      security:
+        - {}
+      operationId: get-gametypes
+      summary: Get all game types
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/gametypes.md#get-gametypes
+      tags:
+        - gametypes
+      parameters:
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/OrderbyName"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the game types paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/GameType"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /gametypes/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a game type
+        schema:
+          type: string
+
+    get:
+      tags:
+        - gametypes
+      operationId: get-gametypesid
+      security:
+        - {}
+      summary: Retrieve a single game type by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/gametypes.md#get-gametypesid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The game type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/GameType"
+
+  /genres:
+    get:
+      security:
+        - {}
+      operationId: get-genres
+      summary: Get all genres
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/genres.md#get-genres
+      tags:
+        - genres
+      parameters:
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/OrderbyName"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the genres paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Genre"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /genres/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a genre
+        schema:
+          type: string
+
+    get:
+      tags:
+        - genres
+      operationId: get-genresid
+      security:
+        - {}
+      summary: Retrieve a single genre by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/genres.md#get-genresid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The genre
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Genre"
+
+  /guests/{name}:
+    parameters:
+      - name: name
+        required: true
+        in: path
+        description: The name of a guest, case-insensitive.
+        schema:
+          type: string
+
+    get:
+      tags:
+        - guests
+      operationId: get-guestsname
+      security:
+        - {}
+      summary: Retrieve a guest, identified by their name.
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/genres.md#get-genresid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The genre
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Guest"
+
+  /leaderboads/{game}/category/{category}:
+    parameters:
+      - name: game
+        in: path
+        required: true
+        description: Game ID or abbreviation.
+        schema:
+          type: string
+      - name: category
+        in: path
+        required: true
+        description: Category ID or abbreviation.
+        schema:
+          type: string
+    get:
+      summary: Get a full-game leaderboard
+      operationId: leaderboardsgamecategorycategory
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#get-leaderboardsgamecategorycategory
+      security:
+        - {}
+      tags:
+        - leaderboards
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - game
+                - category
+                - level
+                - players
+                - regions
+                - platforms
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#embeds
+
+        - $ref: "./components/parameters.yml#/TopN"
+        - $ref: "./components/parameters.yml#/Platform"
+        - $ref: "./components/parameters.yml#/Region"
+        - name: emulators
+          in: query
+          description: When not given, real devices and emulators are shown. When set to a true value, only emulators are shown, else only real devices are shown
+          schema:
+            type: boolean
+        - name: video-only
+          in: query
+          description: When set to a true value, only runs with a video will be returned
+          schema:
+            default: false
+            type: boolean
+        - name: timing
+          in: query
+          description: Controls the sorting
+          schema:
+            type: string
+            enum:
+              - realtime
+              - realtime_noloads
+              - ingame
+        - name: date
+          in: query
+          description: ISO 8601 date string; when given, only returns runs done before or on this date
+          schema:
+            type: string
+            format: date
+        - name: var-{variable id}
+          in: query
+          explode: true
+          description: To filter by custom variables, name the query string parameter `var-{variable ID here}` and use the value ID as the value (for example, `?var-m5ly6jn4=p12z471x`). *__Please refer to the [official docs](https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#get-leaderboardsgamecategorycategory) for more information__*
+          schema:
+            type: object
+            additionalProperties:
+              x-additionalPropertiesName: "var-{variable id}"
+              type: string
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The leaderboard
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Leaderboard"
+  /leaderboads/{game}/level/{level}/{category}:
+    parameters:
+      - name: game
+        in: path
+        required: true
+        description: Game ID or abbreviation.
+        schema:
+          type: string
+      - name: level
+        in: path
+        required: true
+        description: Level ID or abbreviation.
+        schema:
+          type: string
+      - name: category
+        in: path
+        required: true
+        description: Category ID or abbreviation.
+        schema:
+          type: string
+    get:
+      summary: Get an individual-level leaderboard
+      operationId: leaderboardsgamelevellevelcategory
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#get-leaderboardsgamelevellevelcategory
+      security:
+        - {}
+      tags:
+        - leaderboards
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - game
+                - category
+                - level
+                - players
+                - regions
+                - platforms
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#embeds
+        - $ref: "./components/parameters.yml#/TopN"
+        - $ref: "./components/parameters.yml#/Platform"
+        - $ref: "./components/parameters.yml#/Region"
+        - name: emulators
+          in: query
+          description: When not given, real devices and emulators are shown. When set to a true value, only emulators are shown, else only real devices are shown
+          schema:
+            type: boolean
+        - name: video-only
+          in: query
+          description: When set to a true value, only runs with a video will be returned
+          schema:
+            default: false
+            type: boolean
+        - name: timing
+          in: query
+          description: Controls the sorting
+          schema:
+            type: string
+            enum:
+              - realtime
+              - realtime_noloads
+              - ingame
+        - name: date
+          in: query
+          description: ISO 8601 date string; when given, only returns runs done before or on this date
+          schema:
+            type: string
+            format: date
+        - name: var-{variable id}
+          in: query
+          explode: true
+          description: To filter by custom variables, name the query string parameter `var-{variable ID here}` and use the value ID as the value (for example, `?var-m5ly6jn4=p12z471x`). *__Please refer to the [official docs](https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#get-leaderboardsgamecategorycategory) for more information__*
+          schema:
+            type: object
+            additionalProperties:
+              x-additionalPropertiesName: "var-{variable id}"
+              type: string
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The leaderboard
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Leaderboard"
+
+  /levels/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a level
+        schema:
+          type: string
+
+    get:
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - categories
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/categories.md#embeds
+
+      tags:
+        - levels
+      operationId: get-levelsid
+      security:
+        - {}
+      summary: Retrieve a single level, identified by its ID
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/levels.md#get-levelsid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The level
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    #! All of for embedding
+                    allOf:
+                      - $ref: "./components/schemas.yml#/Level"
+                      - properties:
+                          variables:
+                            $ref: "./components/schemas.yml#/Variable"
+                          category:
+                            $ref: "./components/schemas.yml#/Category"
+  /levels/{id}/categories:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a category
+        schema:
+          type: string
+    get:
+      parameters:
+        - name: orderby
+          in: query
+          description: |
+            Order by          | Description
+            ----------------- | ------------------------------------------------------------------
+            ``name``          | sorts alphanumerically by the level name
+            ``miscellaneous`` | sorts by miscellaneous flag
+            ``pos`` (default) | uses the order as defined by the game moderator
+          schema:
+            type: string
+            default: pos
+            enum:
+              - name
+              - miscellaneous
+              - pos
+        - $ref: "components/parameters.yml#/OrderDirection"
+        - $ref: "components/parameters.yml#/Miscellaneous"
+
+      tags:
+        - levels
+      operationId: get-levelsidcategories
+      security:
+        - {}
+      summary: Retrieve all categories that are applicable to the given level
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/levels.md#get-levelsidcategories
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The variables for the level
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Category"
+  /levels/{id}/variables:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a category
+        schema:
+          type: string
+    get:
+      parameters:
+        - name: orderby
+          in: query
+          description: |
+            Order by          | Description
+            ----------------- | ------------------------------------------------------------------
+            ``name``          | sorts alphanumerically by the variable name
+            ``mandatory``     | sorts by mandatory flag
+            ``user-defined``  | sorts by user-defined flag
+            ``pos`` (default) | uses the order as defined by the game moderator
+          schema:
+            type: string
+            default: pos
+            enum:
+              - name
+              - mandatory
+              - user-defined
+              - pos
+        - $ref: "components/parameters.yml#/OrderDirection"
+
+      tags:
+        - levels
+      operationId: get-levelsidvariables
+      security:
+        - {}
+      summary: Retrieve all variables that are applicable to the given level
+
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/levels.md#get-levelsidvariables
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The variables for the level
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Variable"
+  /levels/{id}/records:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a category
+        schema:
+          type: string
+    get:
+      parameters:
+        - $ref: "./components/parameters.yml#/TopN"
+        - $ref: "./components/parameters.yml#/Skip-Empty"
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - game
+                - category
+                - level
+                - players
+                - regions
+                - platforms
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/leaderboards.md#embeds
+
+      tags:
+        - levels
+      operationId: get-levelsidrecords
+      security:
+        - {}
+      summary: Retrieve the records of the given level
+      description: Retrieve the records (first three places) of the given level.
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/levels.md#get-levelsidrecords
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The records for the level
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Leaderboard"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+
+  /notifications:
+    get:
+      summary: Retrieve the notifications for the currently authenticated user
+      operationId: get-notifications
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/notifications.md#get-notifications
+      tags:
+        - notifications
+      security:
+        - apiKey:
+            - NaN
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The level
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Notification"
+
+  /platforms:
+    get:
+      security:
+        - {}
+      operationId: get-platforms
+      summary: Get all platforms
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/platforms.md#get-platforms
+      tags:
+        - platforms
+      parameters:
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - name: orderby
+          in: query
+          description: |
+            order by           | Description
+            ------------------ | ------------------------------------------------------------------
+            ``name`` (default) | sorts alphanumerically by the platform name
+            ``released``       | sorts by the year the platform was released
+          schema:
+            type: string
+            default: name
+            enum:
+              - name
+              - released
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the platforms paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Platform"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /platforms/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a platform
+        schema:
+          type: string
+
+    get:
+      tags:
+        - platforms
+      operationId: get-platformsid
+      security:
+        - {}
+      summary: Retrieve a single platform by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/platforms.md#get-platformsid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The platform
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Platform"
+
+  /profile:
+    get:
+      summary: Retrieve the profile for the currently authenticated user
+      operationId: get-profile
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/profile.md#get-profile
+
+      tags:
+        - profile
+      security:
+        - apiKey:
+            - NaN
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          x-summary: The authenticated users profile
+          description: The profile is identical to the structure of [users](#schema/User), except that the self link points to the profile and there is an additional user link that points to the user resource.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/User"
+
+  /publishers:
+    get:
+      security:
+        - {}
+      operationId: get-publishers
+      summary: Get all Publishers
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/publishers.md#get-publishers
+      tags:
+        - publishers
+      parameters:
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/OrderbyName"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the publishers paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Publisher"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /publishers/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a publisher
+        schema:
+          type: string
+
+    get:
+      tags:
+        - publishers
+      operationId: get-publishersid
+      security:
+        - {}
+      summary: Retrieve a single publisher by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/publishers.md#get-publishersid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The publisher
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Publisher"
+
+  /regions:
+    get:
+      security:
+        - {}
+      operationId: get-regions
+      summary: Get all regions
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/regions.md#get-regions
+      tags:
+        - regions
+      parameters:
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/OrderbyName"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the regions paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Region"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /regions/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a region
+        schema:
+          type: string
+
+    get:
+      tags:
+        - regions
+      operationId: get-regionsid
+      security:
+        - {}
+      summary: Retrieve a single region by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/regions.md#get-regionsid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The region
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Region"
+
+  /runs:
+    get:
+      security:
+        - {}
+      operationId: get-runs
+      summary: Get all runs
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#get-runs
+      tags:
+        - runs
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: string
+            externalDocs:
+              url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#embeds
+            enum:
+              - game
+              - category
+              - level
+              - players
+              - region
+              - platform
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - name: orderby
+          in: query
+          description: |
+            Order by            | Description
+            ------------------- | ------------------------------------------------------------------
+            ``game`` (default)  | Sorts by the game the run was done in
+            ``category``        | Sorts by the category the run was done in
+            ``level``           | Sorts by the level the run was done in
+            ``platform``        | Sorts by the console used for the run
+            ``region``          | Sorts by the console region the run was done in
+            ``emulated``        | Sorts by whether or not a run is done via emulator
+            ``date``            | Sorts by the date the run happened on
+            ``submitted``       | Sorts by the date when the run was submitted to speedrun.com
+            ``status``          | Sorts by verification status
+            ``verify-date``     | Sorts by the date the run was verified on
+          schema:
+            type: string
+            default: game
+            enum:
+              - game
+              - category
+              - level
+              - platform
+              - region
+              - emulated
+              - date
+              - submitted
+              - status
+              - verify-date
+        - name: user
+          in: query
+          description: User ID; when given, only returns runs played by that user
+          schema:
+            type: string
+        - name: guest
+          in: query
+          description: When given, only returns runs done by that guest
+          schema:
+            type: string
+        - name: examiner
+          in: query
+          description: User ID; when given, only returns runs examined by that user
+          schema:
+            type: string
+        - name: game
+          in: query
+          description: Game ID; when given, restricts to that game
+          schema:
+            type: string
+        - name: level
+          in: query
+          description: Level ID; when given, restricts to that level
+          schema:
+            type: string
+        - name: category
+          in: query
+          description: Category ID; when given, restricts to that category
+          schema:
+            type: string
+        - name: platform
+          in: query
+          description: Platform ID; when given, restricts to that platform
+          schema:
+            type: string
+        - name: region
+          in: query
+          description: Region ID; when given, restricts to that region
+          schema:
+            type: string
+        - name: emulated
+          in: query
+          description: When 1, yes or true, only games run on emulator will be returned
+          schema:
+            type: boolean
+        - name: status
+          in: query
+          description: Filters by run status; new, verified and rejected are possible values for this parameter
+          schema:
+            type: string
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the regions paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Run"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+    post:
+      operationId: post-runs
+      summary: Submit a new run.
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#post-runs
+      tags:
+        - runs
+      security:
+        - apiKey:
+            - "NaN"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "./components/schemas.yml#/Run-Submit"
+
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/responses/ErrorResponse/content/application~1json/schema"
+                  - type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: string
+                          description: Error message
+        201:
+          description: Successful submission
+          headers:
+            Location:
+              description: Link to run
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Run"
+  /runs/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a run
+        schema:
+          type: string
+
+    get:
+      security:
+        - {}
+      operationId: get-runsid
+      summary: Get a run
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#get-runsid
+      tags:
+        - runs
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: string
+            externalDocs:
+              url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#embeds
+            enum:
+              - game
+              - category
+              - level
+              - players
+              - region
+              - platform
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the regions paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    $ref: "./components/schemas.yml#/Run"
+    delete:
+      tags:
+        - runs
+      operationId: delete-runsid
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#delete-runsid
+
+      summary: Delete a run
+      description: This method allows an authenticated user to delete a run. Regular users can only delete their own runs, whereas [global] mods can delete runs by other users as well.
+      security:
+        - apiKey:
+            - "NaN"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/responses/ErrorResponse/content/application~1json/schema"
+                  - type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: string
+                          description: Error message
+        200:
+          description: The response of a successful put.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Run"
+
+  /runs/{id}/status:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a run
+        schema:
+          type: string
+
+    put:
+      tags:
+        - runs
+      operationId: put-runsidstatus
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#put-runsidstatus
+
+      summary: Modify a runs status
+      description: By PUTing to this endpoint, a user with sufficient permissions (i.e. a global moderator or a game moderator) can change the verification status of the run identified by its id.
+      security:
+        - apiKey:
+            - "NaN"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              Verify:
+                value: { "status": { "status": "verified" } }
+              Reject:
+                value:
+                  {
+                    "status":
+                      {
+                        "status": "rejected",
+                        "reason": "Spliced footage from older runs together, obvious fake.",
+                      },
+                  }
+            schema:
+              type: object
+              properties:
+                status:
+                  type: object
+                  anyOf:
+                    - properties:
+                        status:
+                          required:
+                            - status
+                          type: string
+                          enum:
+                            - verified
+                    - properties:
+                        status:
+                          type: string
+                          enum:
+                            - rejected
+                        reason:
+                          type: string
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/responses/ErrorResponse/content/application~1json/schema"
+                  - type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: string
+                          description: Error message
+        200:
+          description: The response of a successful put. Body unknown
+          content:
+            application/json:
+              schema:
+                type: object
+  /runs/{id}/players:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a run
+        schema:
+          type: string
+    put:
+      tags:
+        - runs
+      operationId: put-runsidplayers
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/runs.md#put-runsidplayers
+
+      summary: Modify a runs players
+      description: By PUTing to this endpoint, a user with sufficient permissions (i.e. a global moderator or a game moderator) can change list of players that participated in a run.
+      security:
+        - apiKey:
+            - "NaN"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/schemas.yml#/Run-Submit-Player-List"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/responses/ErrorResponse/content/application~1json/schema"
+                  - type: object
+                    properties:
+                      errors:
+                        type: array
+                        items:
+                          type: string
+                          description: Error message
+        200:
+          description: The response of a successful put.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Run"
+
+  /series:
+    get:
+      security:
+        - {}
+      operationId: get-series
+      summary: Get all series
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/series.md#get-series
+      tags:
+        - series
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - moderators
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/series.md#embeds
+        - name: name
+          in: query
+          description: when given, performs a fuzzy search across series names and abbreviations
+          schema:
+            type: string
+        - name: abbreviation
+          in: query
+          description: When given, performs an exact-match search for this abbreviation
+          schema:
+            type: string
+        - name: moderator
+          in: query
+          description: Moderator ID; when given, only series moderated by that user will be returned
+          schema:
+            type: string
+        - name: orderby
+          in: query
+          description: |
+            Order by               | Description
+            ---------------------- | ------------------------------------------------------------------
+            ``name.int`` (default) | Sorts alphanumerically by the international name
+            ``name.jap``           | Sorts alphanumerically by the japanese name
+            ``abbreviation``       | Sorts alphanumerically by the abbreviation
+            ``created``            | Sorts by the date when the series was added on speedrun.com
+          schema:
+            type: string
+            default: name.int
+            enum:
+              - name.int
+              - name.jap
+              - abbreviation
+              - created
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the series paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Series"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /series/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id or abbreviation of a series
+        schema:
+          type: string
+
+    get:
+      tags:
+        - series
+      operationId: get-seriesid
+      security:
+        - {}
+      summary: Retrieve a single series by its id or abbreviation
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/users.md#get-seriesid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Series"
+  /series/{id}/games:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id or abbreviation of a series
+        schema:
+          type: string
+
+    get:
+      tags:
+        - series
+      operationId: get-seriesidgames
+      security:
+        - {}
+      summary: Retrieve all games of a given series
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/series.md#get-seriesidgames
+      parameters:
+        - name: embed
+          in: query
+          style: form
+          explode: false
+          description: Embed additional resources into the response. See [embedding](https://github.com/speedruncomorg/api/blob/master/version1/embedding.md) for more info.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - levels
+                - categories
+                - moderators
+                - gametypes
+                - platforms
+                - regions
+                - genres
+                - engines
+                - developers
+                - publishers
+                - variables
+              externalDocs:
+                url: https://github.com/speedruncomorg/api/blob/master/version1/games.md#embeds
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/Platform"
+        - $ref: "./components/parameters.yml#/Region"
+        - name: name
+          in: query
+          description: When given, performs a fuzzy search across game names and abbreviations
+          schema:
+            type: string
+        - name: abbreviation
+          in: query
+          description: When given, performs an exact-match search for this abbreviation
+          schema:
+            type: string
+        - name: released
+          in: query
+          description: When given, restricts to games released in that year
+          schema:
+            type: number
+        - name: gametype
+          in: query
+          description: Game type ID; when given, restricts to that game type
+          schema:
+            type: string
+        - name: genre
+          in: query
+          description: Genre ID; when given, restricts to that genre
+          schema:
+            type: string
+        - name: engine
+          in: query
+          description: Engine ID; when given, restricts to that engine
+          schema:
+            type: string
+        - name: developer
+          in: query
+          description: Developer ID; when given, restricts to that developer
+          schema:
+            type: string
+        - name: publisher
+          in: query
+          description: Publisher ID; when given, restricts to that publisher
+          schema:
+            type: string
+        - name: moderator
+          in: query
+          description: Moderator ID; when given, only games moderated by that user will be returned
+          schema:
+            type: string
+        - name: romhack
+          in: query
+          deprecated: true
+          description: Legacy parameter, do not use this in new code; whether or not to include games with game types (if this parameter is not set, game types are included; if it is set to a true value, only games with game types will be returned, otherwise only games without game types are returned)
+          schema:
+            type: boolean
+        - name: _bulk
+          in: query
+          description: Enable [bulk access](https://github.com/speedruncomorg/api/blob/master/version1/games.md#bulk-access)
+          schema:
+            type: boolean
+
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The series
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/Series"
+
+  /users:
+    get:
+      security:
+        - {}
+      operationId: get-users
+      summary: Get all users
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/users.md#get-users
+      tags:
+        - users
+      parameters:
+        - name: lookup
+          in: query
+          description: when given, searches the value (case-insensitive exact-string match) across user names, URLs and social profiles; all other query string filters are disabled when this is given
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: only returns users whose name/URL contains the given value; the comparision is case-insensitive
+          schema:
+            type: string
+        - name: twitch
+          in: query
+          description: searches for Twitch usernames
+          schema:
+            type: string
+        - name: hitbox
+          in: query
+          description: searches for Hitbox usernames
+          schema:
+            type: string
+        - name: twitter
+          in: query
+          description: searches for Twitter usernames
+          schema:
+            type: string
+        - name: speedrunslive
+          in: query
+          description: searches for SpeedRunsLive usernames
+          schema:
+            type: string
+        - name: orderby
+          in: query
+          description: |
+            Order by               | Description
+            ---------------------- | ------------------------------------------------------------------
+            ``name.int`` (default) | Sorts alphanumerically by the international name
+            ``name.jap``           | Sorts alphanumerically by the japanese name
+            ``signup``             | Sorts by the signup date
+            ``role``               | Sorts by the user role
+          schema:
+            type: string
+            default: name.int
+            enum:
+              - name.int
+              - name.jap
+              - signup
+              - role
+        - $ref: "./components/parameters.yml#/OrderDirection"
+        - $ref: "./components/parameters.yml#/Offset"
+        - $ref: "./components/parameters.yml#/Max"
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: All of the users paginated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "./components/schemas.yml#/User"
+                  pagination:
+                    $ref: "./components/schemas.yml#/Pagination"
+  /users/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id or username of a user
+        schema:
+          type: string
+
+    get:
+      tags:
+        - regions
+      operationId: get-usersid
+      security:
+        - {}
+      summary: Retrieve a single region by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/users.md#get-usersid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/User"
+  /users/{id}/personal-bests:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id or username of a user
+        schema:
+          type: string
+
+    get:
+      tags:
+        - users
+      operationId: get-usersidpersonal-bests
+      security:
+        - {}
+      summary: Retrieve Personal Bests of the given user
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/users.md#get-usersidpersonal-bests
+      parameters:
+        - name: top
+          in: query
+          description: When given, only PBs with a place equal or better than this value (e.g. ``top=1`` returns all World Records of the given user)
+          schema:
+            minimum: 1
+            type: number
+        - name: series
+          description: When given, restricts the result to games and romhacks in that series; can be either a series ID or abbreviation
+          in: query
+          schema:
+            type: string
+        - name: game
+          description: When given, restricts the result to that game; can be either a game ID or abbreviation
+          in: query
+          schema:
+            type: string
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        place:
+                          type: number
+                        run:
+                          $ref: "./components/schemas.yml#/Run"
+                        game:
+                          $ref: "./components/schemas.yml#/Game"
+                        category:
+                          $ref: "./components/schemas.yml#/Category"
+                      required:
+                        - place
+                        - run
+
+  /variables/{id}:
+    parameters:
+      - name: id
+        required: true
+        in: path
+        description: The id of a variable
+        schema:
+          type: string
+
+    get:
+      tags:
+        - variables
+      operationId: get-variablesid
+      security:
+        - {}
+      summary: Retrieve a single variable by its id
+      externalDocs:
+        url: https://github.com/speedruncomorg/api/blob/master/version1/variables.md#get-variablesid
+      responses:
+        420:
+          $ref: "#/components/responses/Throttled"
+        404:
+          $ref: "#/components/responses/ErrorResponse"
+        200:
+          description: The variable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "./components/schemas.yml#/Variable"
