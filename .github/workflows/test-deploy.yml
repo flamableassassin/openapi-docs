@@ -6,6 +6,11 @@ name: Test deployment
 
 on:
   pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
     branches:
       - main
     # Review gh actions docs if you want to further define triggers, paths, etc
