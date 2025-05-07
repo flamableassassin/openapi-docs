@@ -35,6 +35,7 @@ components:
           - `notes`
           - `info`
           - `modlogs`
+          - `xp`
 
   responses:
     unauthorised:
@@ -76,6 +77,9 @@ tags:
     x-displayName: Note Endpoints
     externalDocs:
       url: https://discord.com/channels/270438133584232449/914296262520627290/994386530179239937
+  - name: xp
+    description: Endpoints for the XP system
+    x-displayName: XP System Endpoints
   - name: other
     description: Other endpoints
     x-displayName: Other Endpoints
@@ -746,3 +750,71 @@ paths:
                         type: integer
                       caseCount:
                         type: integer
+
+  /xp:
+    get:
+      summary: Get a users xp
+      tags:
+        - xp
+      parameters:
+        - name: userid
+          schema:
+            type: string
+            format: "Snowflake"
+          in: query
+      security:
+        - apiKey:
+            - xp
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/userxp"
+    put:
+      summary: Update a users xp
+      tags:
+        - xp
+      parameters:
+        - name: userid
+          schema:
+            type: string
+            format: "Snowflake"
+          in: query
+      security:
+        - apiKey:
+            - xp
+      requestBody:
+        required: true
+        description: The XP amount of a user to update
+        content:
+          application/json:
+            schema:
+              type: object
+              oneOf:
+                - type: object
+                  properties:
+                    textamount:
+                      description: The amount to add to a users text level
+                      oneOf:
+                        - type: number
+                        - type: "null"
+                - type: object
+                  properties:
+                    voiceamount:
+                      description: The amount to add to a users voice level
+                      oneOf:
+                        - type: number
+                        - type: "null"
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/userxp"

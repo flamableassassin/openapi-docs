@@ -117,3 +117,10 @@ notes:
         type: string
       time:
         type: integer
+userxp:
+  type: object
+  properties:
+    text:
+      type: number
+    voice:
+      type: number
