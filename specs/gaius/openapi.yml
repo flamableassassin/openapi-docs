@@ -774,7 +774,7 @@ paths:
             application/json:
               schema:
                 $ref: "./components/schemas.yml#/userxp"
-    put:
+    patch:
       summary: Update a users xp
       tags:
         - xp
