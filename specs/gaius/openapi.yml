@@ -794,7 +794,7 @@ paths:
           application/json:
             schema:
               type: object
-              oneOf:
+              anyOf:
                 - type: object
                   properties:
                     textamount:
