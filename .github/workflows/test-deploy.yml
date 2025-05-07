@@ -30,8 +30,10 @@ jobs:
           cache: npm
 
       - name: Install dependencies
+        if: github.event.action != 'closed'
         run: npm ci
       - name: Test build website
+        if: github.event.action != 'closed'
         run: npm run build
 
       - name: Deploy preview
