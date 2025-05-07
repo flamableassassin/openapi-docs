@@ -26,3 +26,8 @@ jobs:
         run: npm ci
       - name: Test build website
         run: npm run build
+
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: ./build
