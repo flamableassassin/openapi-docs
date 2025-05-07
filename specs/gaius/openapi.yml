@@ -806,7 +806,7 @@ paths:
                   properties:
                     voiceamount:
                       description: The amount to add to a users voice level
-                      anyOf:
+                      oneOf:
                         - type: number
                         - type: "null"
       responses:
