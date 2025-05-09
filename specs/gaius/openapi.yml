@@ -809,7 +809,6 @@ paths:
                     - type: string
                       description: A number as a string
                     - type: number
-                      description: The amount to add
                     # - type: "null"
                     # description: Use to not modify the value
                 voiceamount:
@@ -817,6 +816,7 @@ paths:
                   oneOf:
                     - type: string
                       description: A number as a string
+                    - type: number
                     # - type: "null"
                     # description: Use to not modify the value
       responses:
