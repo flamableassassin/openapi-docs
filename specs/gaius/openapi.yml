@@ -91,6 +91,9 @@ tags:
   - name: leveling
     description: Endpoints for the Leveling system
     x-displayName: Leveling System Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/1370477784933072927
+
   - name: other
     description: Other endpoints
     x-displayName: Other Endpoints
