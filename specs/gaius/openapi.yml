@@ -751,7 +751,7 @@ paths:
                       caseCount:
                         type: integer
 
-  /xp:
+  /xp/{userid}:
     get:
       summary: Get a users xp
       tags:
@@ -783,7 +783,7 @@ paths:
           schema:
             type: string
             format: "Snowflake"
-          in: query
+          in: path
       security:
         - apiKey:
             - xp
