@@ -121,6 +121,14 @@ userxp:
   type: object
   properties:
     text:
-      type: number
+      oneOf:
+        - type: number
+          description: users XP for text
+        - type: "null"
+          description: If you have done an int under/overflow. Contact dev for fix
     voice:
-      type: number
+      oneOf:
+        - type: number
+          description: users XP for voice
+        - type: "null"
+          description: If you have done an int under/overflow. Contact dev for fix

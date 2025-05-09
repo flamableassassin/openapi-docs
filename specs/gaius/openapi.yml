@@ -802,21 +802,23 @@ paths:
           application/json:
             schema:
               type: object
-              anyOf:
-                - type: object
-                  properties:
-                    textamount:
-                      description: The amount to add to a users text level
-                      oneOf:
-                        - type: number
-                        - type: "null"
-                - type: object
-                  properties:
-                    voiceamount:
-                      description: The amount to add to a users voice level
-                      oneOf:
-                        - type: number
-                        - type: "null"
+              properties:
+                textamount:
+                  description: The amount to add to a users text level
+                  oneOf:
+                    - type: string
+                      description: A number as a string
+                    - type: number
+                      description: The amount to add
+                    # - type: "null"
+                    # description: Use to not modify the value
+                voiceamount:
+                  description: The amount to add to a users voice level
+                  oneOf:
+                    - type: string
+                      description: A number as a string
+                    # - type: "null"
+                    # description: Use to not modify the value
       responses:
         401:
           $ref: "#/components/responses/unauthorised"
