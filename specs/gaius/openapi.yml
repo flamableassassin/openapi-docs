@@ -35,7 +35,7 @@ components:
           - `notes`
           - `info`
           - `modlogs`
-          - `xp`
+          - `leveling`
 
   responses:
     unauthorised:
@@ -77,9 +77,9 @@ tags:
     x-displayName: Note Endpoints
     externalDocs:
       url: https://discord.com/channels/270438133584232449/914296262520627290/994386530179239937
-  - name: xp
-    description: Endpoints for the XP system
-    x-displayName: XP System Endpoints
+  - name: leveling
+    description: Endpoints for the Leveling system
+    x-displayName: Leveling System Endpoints
   - name: other
     description: Other endpoints
     x-displayName: Other Endpoints
@@ -777,7 +777,7 @@ paths:
     patch:
       summary: Update a users xp
       tags:
-        - xp
+        - leveling
       parameters:
         - name: userid
           schema:
@@ -786,7 +786,7 @@ paths:
           in: path
       security:
         - apiKey:
-            - xp
+            - leveling
       requestBody:
         required: true
         description: The XP amount of a user to update
