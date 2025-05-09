@@ -46,6 +46,17 @@ components:
             enum:
               - Not Permitted
             type: string
+    teapot:
+      description: The response for an invalid user ID
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                enum:
+                  - "and so are you."
 tags:
   - name: wordlist
     description: Endpoints for wordlists
@@ -722,16 +733,7 @@ paths:
         401:
           $ref: "#/components/responses/unauthorised"
         418:
-          description: The response for an invalid user ID
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - "and so are you."
+          $ref: "#/components/responses/teapot"
         200:
           description: The users response
           content:
@@ -768,6 +770,8 @@ paths:
       responses:
         401:
           $ref: "#/components/responses/unauthorised"
+        418:
+          $ref: "#/components/responses/teapot"
         200:
           description: The response on a successful request
           content:
@@ -812,6 +816,8 @@ paths:
       responses:
         401:
           $ref: "#/components/responses/unauthorised"
+        418:
+          $ref: "#/components/responses/teapot"
         200:
           description: The response on a successful request
           content:
