@@ -755,16 +755,16 @@ paths:
     get:
       summary: Get a users xp
       tags:
-        - xp
+        - leveling
       parameters:
         - name: userid
           schema:
             type: string
             format: "Snowflake"
-          in: query
+          in: path
       security:
         - apiKey:
-            - xp
+            - leveling
       responses:
         401:
           $ref: "#/components/responses/unauthorised"
