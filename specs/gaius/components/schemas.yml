@@ -117,3 +117,18 @@ notes:
         type: string
       time:
         type: integer
+userxp:
+  type: object
+  properties:
+    text:
+      oneOf:
+        - type: number
+          description: users XP for text
+        - type: "null"
+          description: If you have done an int under/overflow. Contact dev for fix
+    voice:
+      oneOf:
+        - type: number
+          description: users XP for voice
+        - type: "null"
+          description: If you have done an int under/overflow. Contact dev for fix

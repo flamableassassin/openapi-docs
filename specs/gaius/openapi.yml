@@ -35,6 +35,7 @@ components:
           - `notes`
           - `info`
           - `modlogs`
+          - `leveling`
 
   responses:
     unauthorised:
@@ -45,6 +46,17 @@ components:
             enum:
               - Not Permitted
             type: string
+    teapot:
+      description: The response for an invalid user ID
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                enum:
+                  - "and so are you."
 tags:
   - name: wordlist
     description: Endpoints for wordlists
@@ -76,6 +88,12 @@ tags:
     x-displayName: Note Endpoints
     externalDocs:
       url: https://discord.com/channels/270438133584232449/914296262520627290/994386530179239937
+  - name: leveling
+    description: Endpoints for the Leveling system
+    x-displayName: Leveling System Endpoints
+    externalDocs:
+      url: https://discord.com/channels/270438133584232449/914296262520627290/1370477784933072927
+
   - name: other
     description: Other endpoints
     x-displayName: Other Endpoints
@@ -392,6 +410,8 @@ paths:
       responses:
         401:
           $ref: "#/components/responses/unauthorised"
+        418:
+          $ref: "#/components/responses/teapot"
         200:
           description: The response on a successful request
           content:
@@ -635,6 +655,8 @@ paths:
       responses:
         401:
           $ref: "#/components/responses/unauthorised"
+        418:
+          $ref: "#/components/responses/teapot"
         200:
           description: The response on a successful request
           content:
@@ -718,16 +740,7 @@ paths:
         401:
           $ref: "#/components/responses/unauthorised"
         418:
-          description: The response for an invalid user ID
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    enum:
-                      - "and so are you."
+          $ref: "#/components/responses/teapot"
         200:
           description: The users response
           content:
@@ -746,3 +759,77 @@ paths:
                         type: integer
                       caseCount:
                         type: integer
+
+  /xp/{userid}:
+    get:
+      summary: Get a users xp
+      tags:
+        - leveling
+      parameters:
+        - name: userid
+          schema:
+            type: string
+            format: "Snowflake"
+          in: path
+      security:
+        - apiKey:
+            - leveling
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        418:
+          $ref: "#/components/responses/teapot"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/userxp"
+    patch:
+      summary: Update a users xp
+      tags:
+        - leveling
+      parameters:
+        - name: userid
+          schema:
+            type: string
+            format: "Snowflake"
+          in: path
+      security:
+        - apiKey:
+            - leveling
+      requestBody:
+        required: true
+        description: The XP amount of a user to update. Set either property to `0` to not modify it
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                textamount:
+                  description: The amount to add to a users text level
+                  oneOf:
+                    - type: string
+                      description: A number as a string
+                    - type: number
+                    # - type: "null"
+                    # description: Use to not modify the value
+                voiceamount:
+                  description: The amount to add to a users voice level
+                  oneOf:
+                    - type: string
+                      description: A number as a string
+                    - type: number
+                    # - type: "null"
+                    # description: Use to not modify the value
+      responses:
+        401:
+          $ref: "#/components/responses/unauthorised"
+        418:
+          $ref: "#/components/responses/teapot"
+        200:
+          description: The response on a successful request
+          content:
+            application/json:
+              schema:
+                $ref: "./components/schemas.yml#/userxp"
