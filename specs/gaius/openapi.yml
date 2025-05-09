@@ -800,7 +800,7 @@ paths:
             - leveling
       requestBody:
         required: true
-        description: The XP amount of a user to update
+        description: The XP amount of a user to update. Set either property to `0` to not modify it
         content:
           application/json:
             schema:
