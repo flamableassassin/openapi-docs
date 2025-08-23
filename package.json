@@ -8,7 +8,8 @@
     "build": "node ./scripts/build.js"
   },
   "devDependencies": {
-    "@redocly/cli": "^1.34.3"
+    "@redocly/cli": "^1.34.3",
+    "handlebars": "^4.7.8"
   },
   "engines": {
     "node": "22.x.x"
