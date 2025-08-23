@@ -1,10 +1,11 @@
 /**
 * This script builds all of the specs into their own html file which end up in /build to be published to github pages
 */
-const { readdirSync, statSync, mkdirSync } = require('fs');
+const { readdirSync, statSync, mkdirSync, readFileSync, writeFileSync } = require('fs');
 const path = require('path')
 const promisify = require("util").promisify
 const exec = promisify(require("child_process").exec)
+const Handlebars = require("handlebars")
 
 const baseDir = path.join(__dirname, '..', 'specs')
 const buildDir = path.join(__dirname, '..', 'build')
@@ -22,3 +23,12 @@ try {
     await exec(`npx redocly build-docs ${path.join(baseDir, folder, "openapi.yml")} -o ${path.join(buildDir, `${folder}.html`)}`)
   }
 })();
+
+
+const indexTemplate = readFileSync(path.join(baseDir, "index.html")).toString()
+
+const compliedTemplate = Handlebars.compile(indexTemplate)
+
+const indexSource = compliedTemplate({ specs: folders })
+
+writeFileSync(path.join(buildDir, "index.html"), indexSource)
